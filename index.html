@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Majlis Apresiasi Pengurusan Sekolah PPD Kota Marudu 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
     html, body { height: 100%; margin: 0; }
     * { box-sizing: border-box; }
@@ -364,24 +364,45 @@
       'admin': { password: 'admin2026', role: 'admin', label: 'Admin' }
     };
 
-   let allRecords = [];
+    let allRecords = [
+      { id: '1', tab: 'mapen', name: 'Hajj. Zamani bin Tan Sri Abdullah', school: 'SK Kota Marudu', role: 'Guru Besar', note: 'Kepimpinan Cemerlang', attendance_status: '', check_in_time: '' },
+      { id: '2', tab: 'mapen', name: 'Puan Sri Noraida binti Ahmad', school: 'SMK Kota Marudu', role: 'Pengetua', note: 'Pengurusan Berkualiti', attendance_status: '', check_in_time: '' },
+      { id: '3', tab: 'mapen', name: 'Haji Rashid bin Mohd Noor', school: 'SK Bintulu', role: 'Guru Besar', note: 'Dedikasi Pendidikan', attendance_status: '', check_in_time: '' },
+      { id: '4', tab: 'mapen', name: 'Cik Siti Nurhayati binti Ibrahim', school: 'SK Kelamit', role: 'Guru Kelas', note: 'Perkhidmatan Terpuji', attendance_status: '', check_in_time: '' },
+      { id: '5', tab: 'mapen', name: 'Encik Mohd Azri bin Sulaiman', school: 'SMK Matu', role: 'Ketua Sektor', note: 'Komitmen Tinggi', attendance_status: '', check_in_time: '' },
+      { id: '6', tab: 'mapen', name: 'Encik Ahmad bin Haji Taib', school: 'SK Kidurong', role: 'Guru Besar', note: 'Khidmat Cemerlang', attendance_status: '', check_in_time: '' },
+      { id: '7', tab: 'mapen', name: 'Puan Nur Aszuhada binti Ramly', school: 'SK Marup', role: 'Guru Koordinator', note: 'Dedikasi Tinggi', attendance_status: '', check_in_time: '' },
+      { id: '8', tab: 'mapen', name: 'Encik Yusri bin Tali', school: 'SMK Dumpas', role: 'Guru Kanan', note: 'Pengurusan Baik', attendance_status: '', check_in_time: '' },
+      { id: '9', tab: 'mapen', name: 'Cik Norashikin binti Mohd', school: 'SK Kuala Baram', role: 'Guru Besar', note: 'Kepimpinan Baik', attendance_status: '', check_in_time: '' },
+      { id: '10', tab: 'mapen', name: 'Encik Zainal bin Muda', school: 'SMK Sibuti', role: 'Pengetua Gantian', note: 'Komitmen Pendidikan', attendance_status: '', check_in_time: '' },
+      { id: '11', tab: 'mapen', name: 'Puan Norliza binti Sudin', school: 'SK Julau', role: 'Guru Besar', note: 'Perkhidmatan Dedikasi', attendance_status: '', check_in_time: '' },
+      { id: '12', tab: 'mapen', name: 'Encik Mohd Razi bin Sulaiman', school: 'SK Niah', role: 'Guru Koordinator', note: 'Kepimpinan Cemerlang', attendance_status: '', check_in_time: '' },
+      { id: '13', tab: 'apc', name: 'Cik Fauziah binti Jaafar', school: 'SK Matu Daro', role: 'Guru Kelas', note: 'Perkhidmatan Setia', attendance_status: '', check_in_time: '' },
+      { id: '14', tab: 'apc', name: 'Encik Razali bin Hassan', school: 'SMK Tatau', role: 'Guru Besar Muda', note: 'Dedikasi Luar Biasa', attendance_status: '', check_in_time: '' },
+      { id: '15', tab: 'apc', name: 'Puan Siti Hajar binti Abas', school: 'SK Sebauh', role: 'Guru Koordinator', note: 'Khidmat Cemerlang', attendance_status: '', check_in_time: '' },
+      { id: '16', tab: 'apc', name: 'Encik Hamid bin Latip', school: 'SMK Mukah', role: 'Ketua Jabatan', note: 'Perkhidmatan Terbaik', attendance_status: '', check_in_time: '' },
+      { id: '17', tab: 'apc', name: 'Cik Norida binti Ahmad', school: 'SK Suai', role: 'Guru Kelas', note: 'Dedikasi Kelas', attendance_status: '', check_in_time: '' },
+      { id: '18', tab: 'apc', name: 'Encik Mustafa bin Ismail', school: 'SMK Kapit', role: 'Guru Kanan', note: 'Komitmen Tinggi', attendance_status: '', check_in_time: '' },
+      { id: '19', tab: 'apc', name: 'Puan Zainab binti Othman', school: 'SK Kanowit', role: 'Guru Besar', note: 'Perkhidmatan Cemerlang', attendance_status: '', check_in_time: '' },
+      { id: '20', tab: 'apc', name: 'Encik Osman bin Samat', school: 'SMK Belaga', role: 'Guru Koordinator', note: 'Khidmat Baik', attendance_status: '', check_in_time: '' },
+      { id: '21', tab: 'pangkat', name: 'Hajj. Mahmud bin Haji Mat Sarip', school: 'SK Kidurong', role: 'Guru - Ketua Panitia', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
+      { id: '22', tab: 'pangkat', name: 'Encik Ismail bin Jaafar', school: 'SMK Sarikei', role: 'Guru Kelas - Guru Besar Muda', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
+      { id: '23', tab: 'pangkat', name: 'Puan Hasliyanah binti Abd Halim', school: 'SK Serian', role: 'Guru Koordinator - Ketua Jabatan', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
+      { id: '24', tab: 'pangkat', name: 'Encik Sulaiman bin Che Mat', school: 'SMK Tebedu', role: 'Guru Besar Muda - Guru Besar', note: 'Kenaikan Pangkat', attendance_status: '', check_in_time: '' },
+      { id: '25', tab: 'pangkat', name: 'Cik Rohani binti Yaacob', school: 'SK Gading', role: 'Guru - Guru Koordinator', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
+      { id: '26', tab: 'pangkat', name: 'Encik Taufik bin Ali', school: 'SMK Kuching', role: 'Guru Kelas - Guru Kanan', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
+      { id: '27', tab: 'pangkat', name: 'Puan Maznah binti Hussain', school: 'SK Bau', role: 'Guru Koordinator - Ketua Panitia', note: 'Kenaikan Pangkat', attendance_status: '', check_in_time: '' },
+      { id: '28', tab: 'pangkat', name: 'Encik Ridzuan bin Mohd Zain', school: 'SMK Lundu', role: 'Guru Besar Muda - Ketua Jabatan', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
+      { id: '29', tab: 'pangkat', name: 'Cik Saleha binti Suryani', school: 'SK Simunjan', role: 'Guru - Guru Kelas Kanan', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
+      { id: '30', tab: 'pangkat', name: 'Encik Yahya bin Yaacob', school: 'SMK Serian', role: 'Guru Koordinator - Guru Besar Muda', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
+      { id: '31', tab: 'pesara', name: 'Encik Ahmad bin Haji Taib', school: 'SK Kota Marudu', role: 'Guru Besar Persara', note: '35 Tahun Khidmat', attendance_status: '', check_in_time: '' },
+      { id: '32', tab: 'pesara', name: 'Puan Siti Aisah binti Mohd Amin', school: 'SMK Kota Marudu', role: 'Guru Persara', note: '33 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' },
+      { id: '33', tab: 'pesara', name: 'Encik Haji Mohamed bin Salleh', school: 'SK Nanga Medamit', role: 'Guru Besar Persara', note: '37 Tahun Khidmat', attendance_status: '', check_in_time: '' },
+      { id: '34', tab: 'pesara', name: 'Cik Norhaida binti Aminuddin', school: 'SK Ngerandau', role: 'Guru Persara', note: '32 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' },
+      { id: '35', tab: 'pesara', name: 'Encik Suryadi bin Suryanto', school: 'SMK Ngerandau', role: 'Guru Besar Persara', note: '36 Tahun Khidmat', attendance_status: '', check_in_time: '' },
+      { id: '36', tab: 'pesara', name: 'Puan Zahida binti Zakaria', school: 'SK Debak', role: 'Guru Persara', note: '34 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' }
+    ];
 
-async function loadData() {
-  try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec");
-    const data = await res.json();
-
-    allRecords = data;
-
-    console.log(allRecords); // ✅ sekarang betul
-
-    updateView(); // ✅ refresh UI
-  } catch (err) {
-    console.error("Gagal load data:", err);
-  }
-}
-
-loadData();
     let currentTab = 'mapen';
     let isAdminMode = false;
     let currentUserRole = null;
@@ -426,6 +447,7 @@ loadData();
         updateAttendanceView();
       } else {
         updateRegularView();
+
       }
     }
 
@@ -443,6 +465,7 @@ loadData();
       };
 
       tabRecords.forEach((record, i) => {
+const qrId = `qr-${record.id}`; // ✅ LETAK SINI
         const card = document.createElement('div');
         card.className = 'recipient-card card-hover rounded-xl p-5';
         card.style.cssText = `background: #161630; border: 1px solid ${colors.border}; animation-delay: ${i * 0.06}s;`;
@@ -457,50 +480,42 @@ loadData();
           `;
         }
 
-       card.innerHTML = `
-  <div class="flex items-start gap-3 mb-3">
-    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-heading font-bold" style="background: ${colors.badge}; color: ${colors.accent};">
-      ${logoMap[currentTab]}
-    </div>
-    <div class="min-w-0 flex-1">
-      <h3 class="font-heading font-bold text-sm leading-tight" style="color: #e8d5a3;">
-        ${record.name}
-      </h3>
-      <p class="text-xs mt-0.5" style="color: #8a7a5a;">
-        ${record.role}
-      </p>
-    </div>
-  </div>
+        card.innerHTML = `
+<div class="mt-3 text-center">
+  <canvas id="${qrId}" style="margin:auto;"></canvas>
+</div>
+          <div class="flex items-start gap-3 mb-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-heading font-bold" style="background: ${colors.badge}; color: ${colors.accent};">
+              ${logoMap[currentTab]}
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-heading font-bold text-sm leading-tight" style="color: #e8d5a3;">${record.name}</h3>
+              <p class="text-xs mt-0.5" style="color: #8a7a5a;">${record.role}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-xs mb-2" style="color: ${colors.accent};">
+            <i data-lucide="building" style="width:12px;height:12px;"></i>
+            <span>${record.school}</span>
+          </div>
+          <div class="rounded-lg px-3 py-1.5 text-xs mb-3" style="background: ${colors.badge}; color: ${colors.accent};">
+            ${record.note}
+          </div>
+          ${editDeleteButtons}
+        `;
+        grid.appendChild(card);
+setTimeout(() => {
+ setTimeout(() => {
+  const el = document.getElementById(qrId);
+  if (el) {
+    QRCode.toCanvas(el, record.id, { width: 80 });
+  }
+}, 100);
+}, 0);
+      });
 
-  <div class="flex items-center gap-2 text-xs mb-2" style="color: ${colors.accent};">
-    <i data-lucide="building" style="width:12px;height:12px;"></i>
-    <span>${record.school}</span>
-  </div>
+      lucide.createIcons();
+    }
 
-  <div class="rounded-lg px-3 py-1.5 text-xs mb-3" style="background: ${colors.badge}; color: ${colors.accent};">
-    ${record.note}
-  </div>
-
-  <canvas id="qr-${record.id}" class="mt-3 mx-auto"></canvas>
-
-  ${editDeleteButtons}
-`;
- grid.appendChild(card);
-
-const canvas = document.getElementById(`qr-${record.id}`);
-if (canvas) {
-  QRCode.toCanvas(canvas, record.id, {
-    width: 100,
-    margin: 1
-  });
-}
-
-}); // ✅ tutup forEach
-
-// ✅ render icon sekali sahaja
-lucide.createIcons();
-
-} // ✅ tutup function updateRegularView
     function updateAttendanceView() {
       const allAttendance = allRecords;
       const colors = colorSchemes.kehadiran;
@@ -611,41 +626,19 @@ lucide.createIcons();
       lucide.createIcons();
     }
 
-   async function toggleAttendance(id, status) {
-  const record = allRecords.find(r => r.id === id);
-  if (!record) return;
-
-  let newStatus = "";
-  let time = "";
-
-  if (record.attendance_status === status) {
-    newStatus = "";
-    time = "";
-  } else {
-    newStatus = status;
-    time = new Date().toLocaleTimeString('ms-MY', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-
-  await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "attendance",
-      data: {
-        id: record.id,
-        status: newStatus,
-        time: time
+    function toggleAttendance(id, status) {
+      const record = allRecords.find(r => r.id === id);
+      if (record) {
+        if (record.attendance_status === status) {
+          record.attendance_status = '';
+          record.check_in_time = '';
+        } else {
+          record.attendance_status = status;
+          record.check_in_time = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateAttendanceView();
       }
-    })
-  });
-
-  await loadData(); // 🔥 refresh dari server
-}
+    }
 
     function switchTab(tab) {
       currentTab = tab;
@@ -706,105 +699,79 @@ lucide.createIcons();
       document.getElementById('dataForm').reset();
     }
 
-    async function handleFormSubmit(e) {
-  e.preventDefault();
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const mode = document.getElementById('formMode').value;
+      const name = document.getElementById('formName').value;
+      const school = document.getElementById('formSchool').value;
+      const role = document.getElementById('formRole').value;
+      const note = document.getElementById('formNote').value;
 
-  const mode = document.getElementById('formMode').value;
-  const name = document.getElementById('formName').value;
-  const school = document.getElementById('formSchool').value;
-  const role = document.getElementById('formRole').value;
-  const note = document.getElementById('formNote').value;
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+      submitBtn.textContent = 'Simpan...';
 
-  const submitBtn = e.target.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  submitBtn.style.opacity = '0.6';
-  submitBtn.textContent = 'Simpan...';
+      setTimeout(() => {
+        if (mode === 'add') {
+          allRecords.push({
+            id: Date.now().toString(),
+            tab: currentTab,
+            name,
+            school,
+            role,
+            note,
+            attendance_status: '',
+            check_in_time: ''
+          });
+        } else {
+          const idx = allRecords.findIndex(r => r.id === document.getElementById('formIndex').value);
+          if (idx !== -1) {
+            allRecords[idx] = {
+              ...allRecords[idx],
+              name,
+              school,
+              role,
+              note
+            };
+          }
+        }
+        closeForm();
+        updateView();
 
-  try {
-    if (mode === 'add') {
-      const newRecord = {
-        id: Date.now().toString(),
-        tab: currentTab,
-        name,
-        school,
-        role,
-        note,
-        attendance_status: '',
-        check_in_time: ''
-      };
-
-      await saveRecord(newRecord);
-await loadData(); // 🔥 WAJIB refresh dari server
-    } else {
-      const idx = allRecords.findIndex(
-        r => r.id === document.getElementById('formIndex').value
-      );
-
-      if (idx !== -1) {
-        allRecords[idx] = {
-  ...allRecords[idx],
-  name,
-  school,
-  role,
-  note
-};
-
-await updateRecord(allRecords[idx]); // 🔥 hantar ke server
-await loadData(); // 🔥 refresh dari server
-      }
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.textContent = 'Simpan';
+      }, 300);
     }
 
-    closeForm();
-  } catch (err) {
-    console.error(err);
-    alert("Gagal simpan data");
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.style.opacity = '1';
-  submitBtn.textContent = 'Simpan';
-}
-async function updateRecord(record) {
-  await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "update",
-      data: record
-    })
-  });
-}
-   function showDeleteConfirm(id) {
+    function showDeleteConfirm(id) {
       deleteTarget = id;
       document.getElementById('deleteModal').classList.remove('hidden');
     }
-async function deleteRecord(id) {
-  await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "delete",
-      data: { id }
-    })
-  });
-}
+
     function closeDeleteModal() {
       document.getElementById('deleteModal').classList.add('hidden');
       deleteTarget = null;
     }
 
-   async function confirmDelete() {
-  if (!deleteTarget) return;
+    function confirmDelete() {
+      if (!deleteTarget) return;
+      const deleteBtn = document.querySelector('[onclick="confirmDelete()"]');
+      deleteBtn.disabled = true;
+      deleteBtn.style.opacity = '0.6';
+      deleteBtn.textContent = 'Mempadam...';
 
-  await deleteRecord(deleteTarget); // 🔥 hantar ke server
-  await loadData();                 // 🔥 refresh data
+      setTimeout(() => {
+        allRecords = allRecords.filter(r => r.id !== deleteTarget);
+        closeDeleteModal();
+        updateView();
 
-  closeDeleteModal();
-}
+        deleteBtn.disabled = false;
+        deleteBtn.style.opacity = '1';
+        deleteBtn.textContent = 'Padam';
+      }, 300);
+    }
 
     function hasPermission(permission) {
       if (!currentUserRole) return false;
@@ -981,52 +948,35 @@ async function deleteRecord(id) {
       }, 2000);
     }
 
-    async function processQRData(recordId) {
-  const record = allRecords.find(r => r.id === recordId);
-  if (!record) {
-    showQRError('❌ Data peserta tidak valid');
-    return;
-  }
-
-  const time = new Date().toLocaleTimeString('ms-MY', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-
-  // 🔥 HANTAR KE GOOGLE SHEET
-  await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "attendance",
-      data: {
-        id: recordId,
-        status: "present",
-        time: time
+    function processQRData(recordId) {
+      const record = allRecords.find(r => r.id === recordId);
+      if (!record) {
+        showQRError('❌ Data peserta tidak valid');
+        return;
       }
-    })
-  });
 
-  await loadData(); // 🔥 refresh data dari server
+      // Mark as present
+      record.attendance_status = 'present';
+      record.check_in_time = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
 
-  // UI feedback (kekalkan)
-  const resultDiv = document.getElementById('qrResult');
-  const resultText = document.getElementById('qrResultText');
+      const resultDiv = document.getElementById('qrResult');
+      const resultText = document.getElementById('qrResultText');
 
-  resultText.innerHTML = `
-    <div style="font-size: 14px;">✓ CHECK-IN BERHASIL</div>
-    <div style="font-size: 12px;">${record.name}</div>
-    <div style="font-size: 11px;">Masa: ${time}</div>
-  `;
+      resultText.innerHTML = `<div style="font-size: 14px; margin-bottom: 4px;">✓ CHECK-IN BERHASIL</div><div style="font-size: 12px; opacity: 0.9;">${record.name}</div><div style="font-size: 11px; margin-top: 4px; opacity: 0.8;">Masa: ${record.check_in_time}</div>`;
+      resultDiv.style.background = 'rgba(96,192,128,0.15)';
+      resultDiv.style.border = '1px solid rgba(96,192,128,0.4)';
+      resultDiv.style.display = 'block';
 
-  resultDiv.style.display = 'block';
+      // Update attendance view
+      if (currentTab === 'kehadiran') {
+        updateAttendanceView();
+      }
 
-  setTimeout(() => {
-    resultDiv.style.display = 'none';
-  }, 2500);
-}
+      setTimeout(() => {
+        resultDiv.style.display = 'none';
+        document.getElementById('qrInput').focus();
+      }, 2500);
+    }
 
     function selectRole(role) {
       document.getElementById('roleSelector').style.display = 'none';
@@ -1064,18 +1014,7 @@ async function deleteRecord(id) {
         document.getElementById('adminPassword').value = '';
       }
     }
-async function sendToServer(action, data) {
-  await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: action,
-      data: data
-    })
-  });
-}
+
     function updateAdminUI() {
       const adminBtn = document.querySelector('[onclick="openAdminLogin()"]');
       const addDataContainer = document.getElementById('addDataButtonContainer');
@@ -1154,22 +1093,8 @@ async function sendToServer(action, data) {
       font_family: "Playfair Display",
       font_size: 16
     };
-async function saveRecord(record) {
-  const res = await fetch("https://script.google.com/macros/s/AKfycbylQaBFW2u997aFjeBwRtcBbFPomh_H8a3pTy_PTL3ffcwcFSPPyhpbdMlBx-WsOKxl/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "add",
-      data: record
-    })
-  });
 
-  const text = await res.text();
-  console.log("ADD RESPONSE:", text);
-}
- function applyConfig(config) {
+    function applyConfig(config) {
       const c = { ...defaultConfig, ...config };
 
       document.getElementById('mainTitle').innerHTML = (c.main_title || defaultConfig.main_title).replace(/\n/g, '<br>');
@@ -1230,5 +1155,5 @@ async function saveRecord(record) {
     switchTab('mapen');
     lucide.createIcons();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f021ced417ca319',t:'MTc3NjgzNDUzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f0d87d3c538473c',t:'MTc3Njk1NDI1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
