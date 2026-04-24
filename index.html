@@ -504,13 +504,11 @@ const qrId = `qr-${record.id}`; // ✅ LETAK SINI
         `;
         grid.appendChild(card);
 setTimeout(() => {
- setTimeout(() => {
   const el = document.getElementById(qrId);
   if (el) {
-    QRCode.toCanvas(el, record.id, { width: 80 });
+    QRCode.toCanvas(el, record.id, { width: 200 });
   }
 }, 100);
-}, 0);
       });
 
       lucide.createIcons();
@@ -864,8 +862,23 @@ setTimeout(() => {
         .then(stream => {
           qrStream = stream;
           video.srcObject = stream;
-          video.style.display = 'block';
-          qrScannerActive = true;
+video.setAttribute("playsinline", true);
+video.muted = true; // penting
+
+video.onloadedmetadata = () => {
+  video.play()
+    .then(() => {
+      console.log("✅ Kamera LIVE");
+      video.style.display = 'block';
+      qrScannerActive = true;
+
+      // 🔥 PANGGIL detectQR DI SINI
+      detectQR();
+    })
+    .catch(err => {
+      console.error("❌ Gagal play video:", err);
+    });
+};
           
           statusDiv.textContent = '✓ Kamera siap. Arahkan ke QR Code atau masukkan nama peserta...';
           statusDiv.style.color = '#4a9aff';
@@ -882,15 +895,21 @@ setTimeout(() => {
             try {
               // Only scan every 3rd frame to reduce CPU usage
               if (frameCount % 3 === 0 && video.readyState === video.HAVE_ENOUGH_DATA) {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                ctx.drawImage(video, 0, 0);
+               canvas.width = video.videoWidth / 2;
+canvas.height = video.videoHeight / 2;
+
+ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const code = jsQR(imageData.data, imageData.width, imageData.height);
-                
-                if (code && code.data) {
-                  const qrValue = code.data.trim();
+
+// 🔥 DEBUG LETAK SINI
+if (code) {
+  console.log("QR DETECTED:", code.data);
+}
+
+if (code && code.data) {
+  const qrValue = code.data.trim();
                   const now = Date.now();
                   
                   // Prevent duplicate scans within 2 seconds
@@ -920,7 +939,7 @@ setTimeout(() => {
           };
           
           // Start detection loop
-          detectQR();
+         
         })
         .catch(err => {
           console.error('Camera access error:', err);
