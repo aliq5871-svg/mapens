@@ -974,9 +974,37 @@ if (code && code.data) {
         return;
       }
 
-      // Mark as present
-      record.attendance_status = 'present';
-      record.check_in_time = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
+      // Cegah scan berulang
+if (record.attendance_status === 'present') {
+
+  const resultDiv = document.getElementById('qrResult');
+  const resultText = document.getElementById('qrResultText');
+
+  resultText.innerHTML = `
+    <div style="font-size:14px; margin-bottom:4px;">
+      ⚠️ SUDAH CHECK-IN
+    </div>
+    <div style="font-size:12px; opacity:0.9;">
+      ${record.name}
+    </div>
+    <div style="font-size:11px; margin-top:4px; opacity:0.8;">
+      Masa pertama: ${record.check_in_time}
+    </div>
+  `;
+
+  resultDiv.style.background = 'rgba(255,165,0,0.15)';
+  resultDiv.style.border = '1px solid rgba(255,165,0,0.4)';
+  resultDiv.style.display = 'block';
+
+  return;
+}
+
+// Mark as present
+record.attendance_status = 'present';
+record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
+  hour: '2-digit',
+  minute: '2-digit'
+});
 
       const resultDiv = document.getElementById('qrResult');
       const resultText = document.getElementById('qrResultText');
