@@ -5,11 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Majlis Apresiasi Pengurusan Sekolah PPD Kota Marudu 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+<script>
+function getSeatPosition(seat) { const positions = { A1: { top:'45%', left:'58%' }, A2: { top:'45%', left:'65%' }, A3: { top:'52%', left:'58%' }, A4: { top:'52%', left:'65%' }, B1: { top:'30%', left:'40%' }, B2: { top:'30%', left:'47%' } }; return positions[seat] || { top:'50%', left:'50%' }; }
+
+function showSeatMap(id) { const record = allRecords.find(r => r.id == id); const pos = getSeatPosition(record.seat); document.getElementById('seatMapContent') .innerHTML = ` <div class="text-center mb-4"> <h2 class="text-xl font-bold" style="color:#e8d5a3;" > ${record.name} </h2> <p style="color:#d1d5db; margin-top:8px;"> Meja: ${record.table || '-'} </p> <p style="color:#ffffff; margin-top:4px;"> Kerusi: ${record.seat || '-'} </p></p> </div> <div class="mt-6 relative"> <img src="https://i.imgur.com/U2XmiSJ.png" class="w-full rounded-xl" style=" border:1px solid rgba(74,154,255,0.2); " > <div style=" position:absolute; top:${pos.top}; left:${pos.left}; transform:translate(-50%,-50%); width:28px; height:28px; border-radius:999px; background:#4a9aff; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; box-shadow:0 0 20px rgba(74,154,255,0.6); " > ${record.seat} </div> </div> `; document.getElementById('seatMapModal') .classList.remove('hidden'); }
+function showOnStage(id){
+
+  const record =
+    allRecords.find(r => r.id == id);
+
+  if(!record) return;
+
+  fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec",{
+    method:"POST",
+    body:JSON.stringify({
+      action:"showSlide",
+      id:id
+    })
+  });
+
+  showToast(
+    record.name +
+    " dipaparkan di LCD Pentas"
+  );
+
+}
+function closeSeatMap() {
+  document.getElementById('seatMapModal')
+          .classList.add('hidden');
+}
+
+function generateSeats(table, activeSeat) {
+
+  let html = '';
+
+  const seats = ['A1','A2','A3','A4','A5','A6','A7','A8'];
+
+  seats.forEach(seat => {
+
+    const active = seat === activeSeat;
+
+    html += `
+      <div style="
+        width:60px;
+        height:60px;
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-weight:bold;
+        background:${active ? '#4a9aff' : 'rgba(255,255,255,0.06)'};
+        color:${active ? '#ffffff' : '#8a7a5a'};
+        border:1px solid ${active ? '#4a9aff' : 'rgba(255,255,255,0.08)'};
+      ">
+        ${seat}
+      </div>
+    `;
+  });
+
+  return html;
+}
+// AUTO REFRESH DATA
+setInterval(() => {
+
+  fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec")
+
+    .then(r => r.json())
+
+    .then(data => {
+
+      allRecords = data.map(r => ({
+
+        ...r,
+
+        id: String(r.id || '').trim(),
+
+        photo: String(r.photo || '').trim()
+
+      }));
+
+      updateView();
+
+      updateDashboard();
+
+      console.log("Auto refresh berjaya");
+
+    })
+
+    .catch(err => {
+
+      console.log("Auto refresh gagal", err);
+
+    });
+
+}, 30000);
+</script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <style>
+
     html, body { height: 100%; margin: 0; }
     * { box-sizing: border-box; }
 
@@ -104,15 +201,108 @@
       animation: fadeUp 0.5s ease-out both;
     }
 
-    .hero-pattern {
-      background-image:
-        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(212,175,55,0.03) 35px, rgba(212,175,55,0.03) 70px),
-        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(212,175,55,0.02) 35px, rgba(212,175,55,0.02) 70px),
-        radial-gradient(circle at 20% 50%, rgba(212,175,55,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(212,175,55,0.04) 0%, transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(212,175,55,0.05) 0%, transparent 50%);
-    }
-    
+   .hero-pattern{
+
+  background-color:#000000 !important;
+
+  background-image:
+
+    /* Motif bunga batik */
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255,215,0,0.18) 0px,
+      rgba(255,215,0,0.18) 8px,
+      transparent 10px
+    ),
+
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(212,175,55,0.16) 0px,
+      rgba(212,175,55,0.16) 7px,
+      transparent 9px
+    ),
+
+    radial-gradient(
+      circle at 40% 75%,
+      rgba(255,215,0,0.14) 0px,
+      rgba(255,215,0,0.14) 9px,
+      transparent 11px
+    ),
+
+    /* Lengkung ukiran tangan */
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255,215,0,0.06) 0px,
+      rgba(255,215,0,0.06) 5px,
+      transparent 5px,
+      transparent 36px
+    ),
+
+    /* Sulur daun */
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,215,0,0.035) 0px,
+      rgba(255,215,0,0.035) 3px,
+      transparent 3px,
+      transparent 24px
+    ),
+
+    repeating-linear-gradient(
+      -45deg,
+      rgba(184,134,11,0.03) 0px,
+      rgba(184,134,11,0.03) 3px,
+      transparent 3px,
+      transparent 24px
+    ),
+
+    /* Glow batik */
+    radial-gradient(
+      circle at center,
+      rgba(255,215,0,0.08) 0%,
+      transparent 60%
+    );
+
+  background-size:
+    220px 220px,
+    260px 260px,
+    300px 300px,
+    140px 140px,
+    80px 80px,
+    80px 80px,
+    100% 100%;
+
+  background-position:
+    0 0,
+    120px 40px,
+    60px 140px,
+    center,
+    center,
+    center,
+    center;
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.hero-pattern::before{
+
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.35),
+      rgba(0,0,0,0.58)
+    );
+
+  pointer-events:none;
+
+}    
     .sabah-sarawak-backdrop {
       background-image:
         repeating-linear-gradient(0deg, transparent, transparent 25px, rgba(212,175,55,0.04) 25px, rgba(212,175,55,0.04) 26px),
@@ -145,10 +335,265 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #000000; }
     ::-webkit-scrollbar-thumb { background: #c9a227; border-radius: 3px; }
+html,
+body,
+#app{
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+section{
+  width:100%;
+}
+
+#recipientGrid{
+  width:100%;
+}
+
+#tabNav{
+  width:100%;
+  -webkit-overflow-scrolling:touch;
+}
+
+canvas{
+  max-width:100%;
+  height:auto;
+}
+
+video{
+  max-width:100%;
+  height:auto;
+}
+
+img{
+  max-width:100%;
+  height:auto;
+}
+
+footer{
+  width:100%;
+}
+
+@media (max-width:640px){
+
+  .grid-cols-2{
+    grid-template-columns:1fr;
+  }
+
+  #mainTitle{
+    font-size:2rem !important;
+    line-height:1.2 !important;
+  }
+
+}
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+  /* HEADER */
+  header{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+
+  .hero-pattern{
+    min-height:auto !important;
+  }
+
+  /* TAJUK */
+  h1{
+    font-size:2rem !important;
+    line-height:1.2 !important;
+  }
+
+  h2{
+    font-size:1.3rem !important;
+  }
+
+  /* SUBTITLE */
+  .hero-pattern p{
+    font-size:0.92rem !important;
+    line-height:1.5 !important;
+  }
+
+  /* CORAK UKIRAN */
+  .hero-pattern .absolute.top-0.left-0,
+  .hero-pattern .absolute.top-0.right-0{
+
+    width:220px !important;
+    height:220px !important;
+
+    opacity:0.28 !important;
+  }
+
+  /* CARD */
+  .card,
+  .participant-card{
+
+    border-radius:18px !important;
+
+    padding:14px !important;
+  }
+
+  /* GRID */
+  .grid{
+    grid-template-columns:1fr !important;
+  }
+
+  /* BUTTON */
+  button{
+    min-height:44px;
+    font-size:0.92rem !important;
+  }
+
+  /* TAB */
+  .tab-button{
+
+    padding:10px 12px !important;
+
+    font-size:0.85rem !important;
+  }
+
+  /* IMAGE */
+  img{
+
+    max-width:100%;
+
+    height:auto;
+  }
+
+  /* PROFILE IMAGE */
+  .participant-photo{
+
+    width:88px !important;
+    height:88px !important;
+  }
+
+  /* FORM */
+  input,
+  select,
+  textarea{
+
+    font-size:16px !important;
+  }
+
+  /* TABLE SCROLL */
+  table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+
+  /* SPACING */
+  .p-8{
+    padding:1rem !important;
+  }
+
+  .px-8{
+    padding-left:1rem !important;
+    padding-right:1rem !important;
+  }
+
+  .py-8{
+    padding-top:1rem !important;
+    padding-bottom:1rem !important;
+  }
+
+}
+/* =========================
+   TAB SAMA SAIZ
+========================= */
+
+#tabNav{
+
+  display:grid !important;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(140px,1fr));
+
+  gap:12px;
+
+  width:100%;
+
+}
+
+#tabNav button{
+
+  width:100% !important;
+
+  min-height:56px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  padding:12px 14px !important;
+
+  border-radius:16px;
+
+  font-weight:600;
+
+  transition:all .25s ease;
+
+}
+
+#tabNav button:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 10px 24px rgba(212,175,55,0.12);
+
+}
+
+@media (max-width:768px){
+
+  #tabNav{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+  }
+
+}
+
+@media (max-width:480px){
+
+  #tabNav{
+
+    gap:8px;
+
+  }
+
+  #tabNav button{
+
+    min-height:52px;
+
+    font-size:0.85rem !important;
+
+    padding:10px !important;
+
+  }
+
+}
   </style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <style>body { box-sizing: border-box; }</style>
- </head>
+ 
+<style>
+#dashApc,#dashPangkat,#dashPesara{display:none!important;}
+#dashApc,#dashPangkat,#dashPesara{}
+section .grid.grid-cols-2.md\:grid-cols-4>div:nth-child(n+2):nth-child(-n+4){display:none!important;}
+</style>
+
+</head>
  <body class="h-full font-body">
   <div id="app" class="w-full h-full overflow-auto relative" style="background: #000000;">
    <div class="fixed inset-0 sabah-sarawak-backdrop pointer-events-none" style="z-index: 0;"></div>
@@ -187,20 +632,9 @@
       </div>
      </div>
     </div>
-    <header class="hero-pattern relative overflow-hidden" style="background: linear-gradient(135deg, #000000 0%, #0a0a0f 40%, #000000 100%);">
-     <div class="ornament absolute top-4 left-4 text-8xl font-heading" style="color: #d4af37;">
-      ❧
-     </div>
-     <div class="ornament absolute top-4 right-4 text-8xl font-heading" style="color: #d4af37; transform: scaleX(-1);">
-      ❧
-     </div>
-     <div class="max-w-5xl mx-auto px-4 py-16 md:py-24 text-center relative z-10">
-      <div class="anim-fade anim-d1 mb-6">
-       <div class="inline-flex items-center justify-center w-24 h-24 rounded-full border-2" style="border-color: #d4af37; background: rgba(212,175,55,0.08);">
-        <svg width="48" height="48" viewbox="0 0 48 48" fill="none"><path d="M24 4L28 16H40L30 24L34 36L24 28L14 36L18 24L8 16H20L24 4Z" fill="#d4af37" opacity="0.9" /> <circle cx="24" cy="24" r="8" stroke="#c9a227" stroke-width="1.5" fill="none" />
-        </svg>
-       </div>
-      </div>
+    <header class="hero-pattern relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 py-16 md:py-24 text-center relative z-10"> <div class="anim-fade anim-d1 mb-6"> <div class="inline-flex items-center justify-center rounded-full border-2" style=" width:150px; height:150px; border-color:#d4af37; background:rgba(212,175,55,0.08); box-shadow:0 0 40px rgba(212,175,55,0.18); " > <img src="https://i.imgur.com/eY5HQvD.png" alt="Logo PPD Kota Marudu" class="w-32 h-32 object-contain" style=" filter: drop-shadow( 0 0 18px rgba(255,215,0,0.4) ); " > </div>
+ </div>
       <p class="anim-fade anim-d2 text-xs md:text-sm tracking-[0.35em] uppercase mb-4" style="color: #c9a227;">Pejabat Pendidikan Daerah Kota Marudu</p>
       <h1 id="mainTitle" class="anim-fade anim-d3 font-heading font-800 text-3xl md:text-5xl lg:text-6xl leading-tight mb-4 gold-shimmer anim-title-glow anim-title-float">Majlis Apresiasi<br>
         Pengurusan Sekolah</h1>
@@ -212,53 +646,38 @@
      </div>
      <div class="w-full h-px" style="background: linear-gradient(90deg, transparent, #b8860b, #ffd700, #b8860b, transparent);"></div>
     </header>
-    <section class="py-12" style="background: linear-gradient(180deg, #0a0a14 0%, #15141f 50%, #0a0a14 100%);">
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-      <div class="anim-fade anim-d1 p-5 rounded-lg" style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.15);">
-       <div class="font-heading text-4xl font-bold" style="color: #ffd700;" id="dashMapen">
-        0
-       </div>
-       <div class="text-xs mt-2 tracking-wider uppercase" style="color: #b8860b;">
-        Penerima MAPEN
-       </div>
-      </div>
-      <div class="anim-fade anim-d2 p-5 rounded-lg" style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.15);">
-       <div class="font-heading text-4xl font-bold" style="color: #ffd700;" id="dashApc">
-        0
-       </div>
-       <div class="text-xs mt-2 tracking-wider uppercase" style="color: #b8860b;">
-        Penerima APC
-       </div>
-      </div>
-      <div class="anim-fade anim-d3 p-5 rounded-lg" style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.15);">
-       <div class="font-heading text-4xl font-bold" style="color: #ffd700;" id="dashPangkat">
-        0
-       </div>
-       <div class="text-xs mt-2 tracking-wider uppercase" style="color: #b8860b;">
-        Naik Pangkat
-       </div>
-      </div>
-      <div class="anim-fade anim-d4 p-5 rounded-lg" style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.15);">
-       <div class="font-heading text-4xl font-bold" style="color: #ffd700;" id="dashPesara">
-        0
-       </div>
-       <div class="text-xs mt-2 tracking-wider uppercase" style="color: #b8860b;">
-        Pesara
-       </div>
-      </div>
-     </div>
-    </section>
+    
+<section class="py-12" style="background: linear-gradient(180deg, #0a0a14 0%, #15141f 50%, #0a0a14 100%);">
+  <div class="flex justify-center">
+    <div class="anim-fade anim-d1 p-5 rounded-lg text-center" style="background: rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.15); min-width:320px; max-width:420px;">
+      <div class="font-heading text-4xl font-bold" style="color:#ffd700;" id="dashMAPeNS">0</div>
+      <div class="text-xs mt-2 tracking-wider uppercase" style="color:#b8860b;">Penerima MAPeNS</div>
+    </div>
+  </div>
+</section>
     <div class="w-full h-px" style="background: linear-gradient(90deg, transparent, #b8860b44, transparent);"></div>
     <section class="py-12" style="background: #0d0d1a;">
      <div class="max-w-5xl mx-auto px-4">
-      <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto" id="tabNav"><button onclick="switchTab('mapen')" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all" data-tab="mapen" style="background: #b8860b; color: #0d0d1a;"> <span class="flex items-center gap-2"><i data-lucide="award" style="width:16px;height:16px;"></i> MAPEN</span> </button> <button onclick="switchTab('apc')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="apc" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="trophy" style="width:16px;height:16px;"></i> APC</span> </button> <button onclick="switchTab('pangkat')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="pangkat" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="trending-up" style="width:16px;height:16px;"></i> Naik Pangkat</span> </button> <button onclick="switchTab('pesara')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="pesara" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="heart" style="width:16px;height:16px;"></i> Pesara</span> </button> <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
+      <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto" id="tabNav"><button onclick="switchTab('MAPeNS')" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all" data-tab="MAPeNS" style="background: #b8860b; color: #0d0d1a;"> <span class="flex items-center gap-2"><i data-lucide="award" style="width:16px;height:16px;"></i> MAPeNS</span> </button>    <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
+<button onclick="switchTab('pengunjung')"
+        class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide"
+        data-tab="pengunjung"
+        style="background: rgba(184,134,11,0.12); color: #b8860b;">
+
+  <span class="flex items-center gap-2">
+    <i data-lucide="users"
+       style="width:16px;height:16px;"></i>
+
+    Pengunjung
+  </span>
+</button>
       </div>
       <div class="flex flex-wrap justify-center gap-3 mb-8" id="addDataButtonContainer" style="display: none;"><button onclick="toggleAddForm()" class="px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all" style="background: #60c080; color: #0d0d1a;"> <i data-lucide="plus" style="width:16px;height:16px;"></i> Tambah Data </button>
       </div>
       <div class="flex flex-wrap justify-center gap-3 mb-8" id="qrButtonContainer" style="display: none;"><button id="qrCheckinBtn" onclick="toggleQRScanner()" class="px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all" style="background: #4a9aff; color: #0d0d1a;"> <i data-lucide="qr-code" style="width:16px;height:16px;"></i> Scan QR </button>
       </div>
       <div class="text-center mb-8">
-       <h2 id="sectionTitle" class="font-heading text-2xl md:text-3xl font-bold" style="color: #e8d5a3;">Penerima Anugerah MAPEN</h2>
+       <h2 id="sectionTitle" class="font-heading text-2xl md:text-3xl font-bold" style="color: #e8d5a3;">Penerima Anugerah MAPeNS</h2>
        <p id="sectionDesc" class="text-sm mt-2" style="color: #8a7a5a;">Menerima Anugerah Pengurusan Cemerlang</p>
       </div><!-- Attendance Stats -->
       <div id="attendanceStats" style="display: none;">
@@ -289,12 +708,85 @@
         </div>
        </div>
       </div>
-      <div id="recipientGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div id="recipientGrid"
+     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+     style="display:grid;">
+</div>
       </div><!-- Attendance List -->
-      <div id="attendanceList" style="display: none;">
-       <div class="space-y-2">
-        <div id="attendanceContent"></div>
-       </div>
+    <div id="attendanceList" style="display:none;">
+
+  <div class="space-y-2">
+    <div id="attendanceContent"></div>
+  </div>
+
+</div>
+
+<div id="visitorList"
+     class="hidden">
+
+  <div class="rounded-xl p-5"
+       style="
+         background:#161630;
+         border:1px solid rgba(184,134,11,0.2);
+       ">
+
+    <div class="flex items-center justify-between mb-5">
+
+      <div>
+        <h3 class="text-lg font-bold"
+            style="color:#e8d5a3;">
+
+          Senarai Pengunjung
+
+        </h3>
+
+        <p class="text-xs mt-1"
+           style="color:#8a7a5a;">
+
+          Rekod tetamu dan pengunjung majlis
+
+        </p>
+      </div>
+
+      <div class="px-3 py-1 rounded-lg text-sm font-semibold"
+           style="
+             background:rgba(74,154,255,0.12);
+             color:#4a9aff;
+           ">
+
+        <span id="visitorCount">0</span> Pengunjung
+
+      </div>
+
+    </div>
+
+   <div class="mb-5">
+
+  <button
+    onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc3ZDsRUsIqDOq-jm7UVtsFDMLWGxCjIu9VCk2dfxuysnfCYw/viewform','_blank')"
+    class="w-full px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+    style="
+      background:#4a9aff;
+      color:white;
+    ">
+
+    <i data-lucide="file-text"
+       style="width:18px;height:18px;"></i>
+
+    Daftar Pengunjung Melalui Google Form
+
+  </button>
+
+</div>
+
+    <div id="visitorContent"
+         class="space-y-2"></div>
+
+  </div>
+
+</div>
+
+
       </div>
      </div>
     </section>
@@ -311,9 +803,29 @@
         </div>
         <div><label class="block text-sm mb-1" style="color: #b8860b;">Jawatan</label> <input id="formRole" type="text" required class="w-full px-3 py-2 rounded-lg text-sm" style="background: #0d0d1a; color: #e8d5a3; border: 1px solid rgba(184,134,11,0.2);" placeholder="Contoh: Guru Besar">
         </div>
-        <div><label class="block text-sm mb-1" style="color: #b8860b;">Catatan/Keterangan</label> <input id="formNote" type="text" required class="w-full px-3 py-2 rounded-lg text-sm" style="background: #0d0d1a; color: #e8d5a3; border: 1px solid rgba(184,134,11,0.2);" placeholder="Catatan khusus">
-        </div>
-       </div>
+<div>
+
+  <label class="block text-sm mb-1"
+         style="color:#b8860b;">
+
+    URL Gambar
+
+  </label>
+
+  <input
+    id="formPhoto"
+    type="text"
+    class="w-full px-3 py-2 rounded-lg text-sm"
+    style="
+      background:#0d0d1a;
+      color:#e8d5a3;
+      border:1px solid rgba(184,134,11,0.2);
+    "
+    placeholder="https://..."
+  >
+
+</div>
+        <div> <label class="block text-sm mb-1" style="color: #b8860b;"> Catatan/Keterangan </label> <input id="formNote" type="text" required class="w-full px-3 py-2 rounded-lg text-sm" style=" background:#0d0d1a; color:#e8d5a3; border:1px solid rgba(184,134,11,0.2); " placeholder="Catatan khusus" > </div> <div> <label class="block text-sm mb-1" style="color: #b8860b;"> Meja </label> <input id="formTable" type="text" class="w-full px-3 py-2 rounded-lg text-sm" style=" background:#0d0d1a; color:#e8d5a3; border:1px solid rgba(184,134,11,0.2); " placeholder="Contoh: VIP 1" > </div> <div> <label class="block text-sm mb-1" style="color: #b8860b;"> Kerusi </label> <input id="formSeat" type="text" class="w-full px-3 py-2 rounded-lg text-sm" style=" background:#0d0d1a; color:#e8d5a3; border:1px solid rgba(184,134,11,0.2); " placeholder="Contoh: A1" > </div>
        <div class="flex gap-3 mt-6"><button type="button" onclick="closeForm()" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold" style="background: rgba(184,134,11,0.12); color: #b8860b;">Batal</button> <button type="submit" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold" style="background: #b8860b; color: #0d0d1a;">Simpan</button>
        </div>
       </form>
@@ -364,60 +876,47 @@
       'admin': { password: 'admin2026', role: 'admin', label: 'Admin' }
     };
 
-    let allRecords = [
-      { id: '1', tab: 'mapen', name: 'Hajj. Zamani bin Tan Sri Abdullah', school: 'SK Kota Marudu', role: 'Guru Besar', note: 'Kepimpinan Cemerlang', attendance_status: '', check_in_time: '' },
-      { id: '2', tab: 'mapen', name: 'Puan Sri Noraida binti Ahmad', school: 'SMK Kota Marudu', role: 'Pengetua', note: 'Pengurusan Berkualiti', attendance_status: '', check_in_time: '' },
-      { id: '3', tab: 'mapen', name: 'Haji Rashid bin Mohd Noor', school: 'SK Bintulu', role: 'Guru Besar', note: 'Dedikasi Pendidikan', attendance_status: '', check_in_time: '' },
-      { id: '4', tab: 'mapen', name: 'Cik Siti Nurhayati binti Ibrahim', school: 'SK Kelamit', role: 'Guru Kelas', note: 'Perkhidmatan Terpuji', attendance_status: '', check_in_time: '' },
-      { id: '5', tab: 'mapen', name: 'Encik Mohd Azri bin Sulaiman', school: 'SMK Matu', role: 'Ketua Sektor', note: 'Komitmen Tinggi', attendance_status: '', check_in_time: '' },
-      { id: '6', tab: 'mapen', name: 'Encik Ahmad bin Haji Taib', school: 'SK Kidurong', role: 'Guru Besar', note: 'Khidmat Cemerlang', attendance_status: '', check_in_time: '' },
-      { id: '7', tab: 'mapen', name: 'Puan Nur Aszuhada binti Ramly', school: 'SK Marup', role: 'Guru Koordinator', note: 'Dedikasi Tinggi', attendance_status: '', check_in_time: '' },
-      { id: '8', tab: 'mapen', name: 'Encik Yusri bin Tali', school: 'SMK Dumpas', role: 'Guru Kanan', note: 'Pengurusan Baik', attendance_status: '', check_in_time: '' },
-      { id: '9', tab: 'mapen', name: 'Cik Norashikin binti Mohd', school: 'SK Kuala Baram', role: 'Guru Besar', note: 'Kepimpinan Baik', attendance_status: '', check_in_time: '' },
-      { id: '10', tab: 'mapen', name: 'Encik Zainal bin Muda', school: 'SMK Sibuti', role: 'Pengetua Gantian', note: 'Komitmen Pendidikan', attendance_status: '', check_in_time: '' },
-      { id: '11', tab: 'mapen', name: 'Puan Norliza binti Sudin', school: 'SK Julau', role: 'Guru Besar', note: 'Perkhidmatan Dedikasi', attendance_status: '', check_in_time: '' },
-      { id: '12', tab: 'mapen', name: 'Encik Mohd Razi bin Sulaiman', school: 'SK Niah', role: 'Guru Koordinator', note: 'Kepimpinan Cemerlang', attendance_status: '', check_in_time: '' },
-      { id: '13', tab: 'apc', name: 'Cik Fauziah binti Jaafar', school: 'SK Matu Daro', role: 'Guru Kelas', note: 'Perkhidmatan Setia', attendance_status: '', check_in_time: '' },
-      { id: '14', tab: 'apc', name: 'Encik Razali bin Hassan', school: 'SMK Tatau', role: 'Guru Besar Muda', note: 'Dedikasi Luar Biasa', attendance_status: '', check_in_time: '' },
-      { id: '15', tab: 'apc', name: 'Puan Siti Hajar binti Abas', school: 'SK Sebauh', role: 'Guru Koordinator', note: 'Khidmat Cemerlang', attendance_status: '', check_in_time: '' },
-      { id: '16', tab: 'apc', name: 'Encik Hamid bin Latip', school: 'SMK Mukah', role: 'Ketua Jabatan', note: 'Perkhidmatan Terbaik', attendance_status: '', check_in_time: '' },
-      { id: '17', tab: 'apc', name: 'Cik Norida binti Ahmad', school: 'SK Suai', role: 'Guru Kelas', note: 'Dedikasi Kelas', attendance_status: '', check_in_time: '' },
-      { id: '18', tab: 'apc', name: 'Encik Mustafa bin Ismail', school: 'SMK Kapit', role: 'Guru Kanan', note: 'Komitmen Tinggi', attendance_status: '', check_in_time: '' },
-      { id: '19', tab: 'apc', name: 'Puan Zainab binti Othman', school: 'SK Kanowit', role: 'Guru Besar', note: 'Perkhidmatan Cemerlang', attendance_status: '', check_in_time: '' },
-      { id: '20', tab: 'apc', name: 'Encik Osman bin Samat', school: 'SMK Belaga', role: 'Guru Koordinator', note: 'Khidmat Baik', attendance_status: '', check_in_time: '' },
-      { id: '21', tab: 'pangkat', name: 'Hajj. Mahmud bin Haji Mat Sarip', school: 'SK Kidurong', role: 'Guru - Ketua Panitia', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
-      { id: '22', tab: 'pangkat', name: 'Encik Ismail bin Jaafar', school: 'SMK Sarikei', role: 'Guru Kelas - Guru Besar Muda', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
-      { id: '23', tab: 'pangkat', name: 'Puan Hasliyanah binti Abd Halim', school: 'SK Serian', role: 'Guru Koordinator - Ketua Jabatan', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
-      { id: '24', tab: 'pangkat', name: 'Encik Sulaiman bin Che Mat', school: 'SMK Tebedu', role: 'Guru Besar Muda - Guru Besar', note: 'Kenaikan Pangkat', attendance_status: '', check_in_time: '' },
-      { id: '25', tab: 'pangkat', name: 'Cik Rohani binti Yaacob', school: 'SK Gading', role: 'Guru - Guru Koordinator', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
-      { id: '26', tab: 'pangkat', name: 'Encik Taufik bin Ali', school: 'SMK Kuching', role: 'Guru Kelas - Guru Kanan', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
-      { id: '27', tab: 'pangkat', name: 'Puan Maznah binti Hussain', school: 'SK Bau', role: 'Guru Koordinator - Ketua Panitia', note: 'Kenaikan Pangkat', attendance_status: '', check_in_time: '' },
-      { id: '28', tab: 'pangkat', name: 'Encik Ridzuan bin Mohd Zain', school: 'SMK Lundu', role: 'Guru Besar Muda - Ketua Jabatan', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
-      { id: '29', tab: 'pangkat', name: 'Cik Saleha binti Suryani', school: 'SK Simunjan', role: 'Guru - Guru Kelas Kanan', note: 'Naik Pangkat', attendance_status: '', check_in_time: '' },
-      { id: '30', tab: 'pangkat', name: 'Encik Yahya bin Yaacob', school: 'SMK Serian', role: 'Guru Koordinator - Guru Besar Muda', note: 'Promosi 2026', attendance_status: '', check_in_time: '' },
-      { id: '31', tab: 'pesara', name: 'Encik Ahmad bin Haji Taib', school: 'SK Kota Marudu', role: 'Guru Besar Persara', note: '35 Tahun Khidmat', attendance_status: '', check_in_time: '' },
-      { id: '32', tab: 'pesara', name: 'Puan Siti Aisah binti Mohd Amin', school: 'SMK Kota Marudu', role: 'Guru Persara', note: '33 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' },
-      { id: '33', tab: 'pesara', name: 'Encik Haji Mohamed bin Salleh', school: 'SK Nanga Medamit', role: 'Guru Besar Persara', note: '37 Tahun Khidmat', attendance_status: '', check_in_time: '' },
-      { id: '34', tab: 'pesara', name: 'Cik Norhaida binti Aminuddin', school: 'SK Ngerandau', role: 'Guru Persara', note: '32 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' },
-      { id: '35', tab: 'pesara', name: 'Encik Suryadi bin Suryanto', school: 'SMK Ngerandau', role: 'Guru Besar Persara', note: '36 Tahun Khidmat', attendance_status: '', check_in_time: '' },
-      { id: '36', tab: 'pesara', name: 'Puan Zahida binti Zakaria', school: 'SK Debak', role: 'Guru Persara', note: '34 Tahun Perkhidmatan', attendance_status: '', check_in_time: '' }
-    ];
+    let allRecords = [];
 
-    let currentTab = 'mapen';
-    let isAdminMode = false;
-    let currentUserRole = null;
-    let deleteTarget = null;
+fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec")
+  .then(r => r.json())
+  .then(data => {
+
+   allRecords = data.map(r => ({
+
+  ...r,
+
+  id: String(r.id || '').trim(),
+
+  photo: String(r.photo || '').trim()
+
+}));
+
+    updateView();
+    updateDashboard();
+
+  });
+
+let visitors = [];
+let currentTab = 'MAPeNS';
+let isAdminMode = false;
+let currentUserRole = null;
+let deleteTarget = null;
 
     const tabInfo = {
-      mapen: { title: "Penerima Anugerah MAPEN", desc: "Menerima Anugerah Pengurusan Cemerlang", icon: "award" },
+      MAPeNS: { title: "Penerima Anugerah MAPeNS", desc: "Menerima Anugerah Pengurusan Cemerlang", icon: "award" },
       apc: { title: "Penerima Anugerah APC", desc: "Anugerah Perkhidmatan Cemerlang", icon: "trophy" },
       pangkat: { title: "Penerima Kenaikan Pangkat", desc: "Tahniah atas kenaikan pangkat yang diterima", icon: "trending-up" },
       pesara: { title: "Penerima Pesara", desc: "Penghargaan atas jasa & dedikasi sepanjang perkhidmatan", icon: "heart" },
-      kehadiran: { title: "Rekod Kehadiran", desc: "Tandai kehadiran peserta majlis", icon: "clipboard-check" }
+      kehadiran: { title: "Rekod Kehadiran", desc: "Tandai kehadiran peserta majlis", icon: "clipboard-check" },pengunjung: {
+  title: "Kehadiran Pengunjung",
+  desc: "Rekod kehadiran tetamu dan pengunjung",
+  icon: "users"
+}
     };
 
     const colorSchemes = {
-      mapen: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)', border: 'rgba(255,215,0,0.2)' },
+      MAPeNS: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)', border: 'rgba(255,215,0,0.2)' },
       apc: { accent: '#c0a040', badge: 'rgba(192,160,64,0.1)', border: 'rgba(192,160,64,0.2)' },
       pangkat: { accent: '#60c080', badge: 'rgba(96,192,128,0.1)', border: 'rgba(96,192,128,0.2)' },
       pesara: { accent: '#e07070', badge: 'rgba(224,112,112,0.1)', border: 'rgba(224,112,112,0.2)' },
@@ -426,29 +925,58 @@
 
     function updateDashboard() {
       // Update dashboard counts to always match actual data
-      document.getElementById('dashMapen').textContent = allRecords.filter(r => r.tab === 'mapen').length;
-      document.getElementById('dashApc').textContent = allRecords.filter(r => r.tab === 'apc').length;
-      document.getElementById('dashPangkat').textContent = allRecords.filter(r => r.tab === 'pangkat').length;
-      document.getElementById('dashPesara').textContent = allRecords.filter(r => r.tab === 'pesara').length;
+      document.getElementById('dashMAPeNS').textContent = allRecords.filter(r => r.tab === 'MAPeNS').length;
+
     }
 
     function updateView() {
       const info = tabInfo[currentTab];
       document.getElementById('sectionTitle').textContent = info.title;
       document.getElementById('sectionDesc').textContent = info.desc;
-      document.getElementById('recipientGrid').style.display = currentTab === 'kehadiran' ? 'none' : 'grid';
-      document.getElementById('attendanceList').style.display = currentTab === 'kehadiran' ? 'block' : 'none';
+     document.getElementById('recipientGrid').style.display =
+  currentTab === 'kehadiran' ||
+  currentTab === 'pengunjung'
+    ? 'none'
+    : 'grid';
+document.getElementById('attendanceList').style.display =
+  currentTab === 'kehadiran'
+    ? 'block'
+    : 'none';
+
+document.getElementById('visitorList').style.display =
+  currentTab === 'pengunjung'
+    ? 'block'
+    : 'none';
+const visitorSection =
+  document.getElementById('visitorList');
+
+if (currentTab === 'pengunjung') {
+
+  visitorSection.classList.remove('hidden');
+
+} else {
+
+  visitorSection.classList.add('hidden');
+
+}
       document.getElementById('attendanceStats').style.display = currentTab === 'kehadiran' ? 'grid' : 'none';
 
       // Update dashboard counts every time view updates
       updateDashboard();
 
-      if (currentTab === 'kehadiran') {
-        updateAttendanceView();
-      } else {
-        updateRegularView();
+     if (currentTab === 'kehadiran') {
 
-      }
+  updateAttendanceView();
+
+} else if (currentTab === 'pengunjung') {
+
+  renderVisitors();
+
+} else {
+
+  updateRegularView();
+
+}
     }
 
     function updateRegularView() {
@@ -458,7 +986,7 @@
       grid.innerHTML = '';
 
       const logoMap = {
-        mapen: window.elementSdk?.config?.logo_mapen || defaultConfig.logo_mapen,
+        MAPeNS: window.elementSdk?.config?.logo_MAPeNS || defaultConfig.logo_MAPeNS,
         apc: window.elementSdk?.config?.logo_apc || defaultConfig.logo_apc,
         pangkat: window.elementSdk?.config?.logo_pangkat || defaultConfig.logo_pangkat,
         pesara: window.elementSdk?.config?.logo_pesara || defaultConfig.logo_pesara
@@ -482,7 +1010,55 @@ const qrId = `qr-${record.id}`; // ✅ LETAK SINI
 
         card.innerHTML = `
 <div class="mt-3 text-center">
-  <canvas id="${qrId}" style="margin:auto;"></canvas>
+
+<canvas
+  id="${qrId}"
+  style="margin:auto; display:none;">
+</canvas>
+
+  <button
+    onclick="downloadQR('${qrId}','${record.name}')"
+    class="mt-3 px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 mx-auto"
+    style="
+      background:rgba(96,192,128,0.15);
+      color:#60c080;
+      border:1px solid rgba(96,192,128,0.25);
+    "
+  >
+    <i data-lucide="download"
+       style="width:14px;height:14px;"></i>
+
+    Download QR
+  </button>
+
+</div>
+<div class="mb-4 text-center">
+
+  <img
+    src="${
+  record.photo &&
+  String(record.photo).trim() !== ''
+    ? String(record.photo).trim()
+    : 'https://i.imgur.com/6VBx3io.png'
+}"
+
+    alt="${record.name}"
+
+    class="w-28 h-28 object-cover rounded-full mx-auto"
+
+    onerror="this.src='https://i.imgur.com/6VBx3io.png'"
+
+    style="
+      width:110px;
+      height:110px;
+      border-radius:999px;
+      object-fit:cover;
+      border:3px solid rgba(212,175,55,0.35);
+      box-shadow:0 0 20px rgba(212,175,55,0.18);
+      background:#0d0d1a;
+    "
+  >
+
 </div>
           <div class="flex items-start gap-3 mb-3">
             <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-heading font-bold" style="background: ${colors.badge}; color: ${colors.accent};">
@@ -500,6 +1076,31 @@ const qrId = `qr-${record.id}`; // ✅ LETAK SINI
           <div class="rounded-lg px-3 py-1.5 text-xs mb-3" style="background: ${colors.badge}; color: ${colors.accent};">
             ${record.note}
           </div>
+<div class="mt-3">
+
+  <button
+    onclick="showSeatMap('${record.id}')"
+    class="w-full px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2"
+    style="background:rgba(74,154,255,0.15);color:#4a9aff;border:1px solid rgba(74,154,255,0.25);"
+  >
+    <i data-lucide="map-pinned"
+       style="width:14px;height:14px;"></i>
+    Map Tempat Duduk
+  </button>
+
+  ${isAdminMode ? `
+<button
+  onclick="showOnStage('${record.id}')"
+  class="w-full mt-2 px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2"
+  style="background:rgba(96,192,128,0.15);color:#60c080;border:1px solid rgba(96,192,128,0.25);"
+>
+  <i data-lucide="monitor"
+     style="width:14px;height:14px;"></i>
+  Papar Di LCD
+</button>
+` : ''}
+
+</div>    
           ${editDeleteButtons}
         `;
         grid.appendChild(card);
@@ -515,36 +1116,79 @@ setTimeout(() => {
     }
 
     function updateAttendanceView() {
-      const allAttendance = allRecords;
+      const allAttendance = allRecords.filter(r => {
+
+  const tab =
+    String(r.tab || '')
+      .trim()
+      .toLowerCase();
+
+  return [
+    'mapen',
+    'mapens',
+    'apc',
+    'pangkat',
+    'pesara'
+  ].includes(tab);
+
+});
       const colors = colorSchemes.kehadiran;
       const content = document.getElementById('attendanceContent');
       content.innerHTML = '';
 
       // Update stats
-      const present = allAttendance.filter(r => r.attendance_status === 'present').length;
-      const absent = allAttendance.filter(r => r.attendance_status === 'absent').length;
-      const pending = allAttendance.filter(r => !r.attendance_status).length;
+     const present = allAttendance.filter(r =>
 
+  r.attendance_status === 'present' ||
+  r.attendance_status === 'Hadir'
+
+).length;
+
+const absent = allAttendance.filter(r =>
+
+  r.attendance_status === 'absent' ||
+  r.attendance_status === 'Tidak Hadir'
+
+).length;
+
+const pending = allAttendance.filter(r =>
+
+  !r.attendance_status ||
+  r.attendance_status === '' ||
+  r.attendance_status === null ||
+  r.attendance_status === undefined ||
+  r.attendance_status === 'pending'
+
+).length;
       document.getElementById('countPresent').textContent = present;
       document.getElementById('countAbsent').textContent = absent;
       document.getElementById('countPending').textContent = pending;
 
       // Group by category
       const categoryColors = {
-        mapen: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)' },
+        MAPeNS: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)' },
         apc: { accent: '#c0a040', badge: 'rgba(192,160,64,0.1)' },
         pangkat: { accent: '#60c080', badge: 'rgba(96,192,128,0.1)' },
         pesara: { accent: '#e07070', badge: 'rgba(224,112,112,0.1)' }
       };
 
       const categoryTitles = {
-        mapen: 'Penerima MAPEN (12 orang)',
-        apc: 'Penerima APC (8 orang)',
-        pangkat: 'Penerima Naik Pangkat (10 orang)',
-        pesara: 'Penerima Pesara (6 orang)'
-      };
 
-      const categories = ['mapen', 'apc', 'pangkat', 'pesara'];
+  MAPeNS:
+    `Penerima MAPeNS (${allAttendance.filter(r => r.tab === 'MAPeNS').length} orang)`,
+
+  apc:
+    `Penerima APC (${allAttendance.filter(r => r.tab === 'apc').length} orang)`,
+
+  pangkat:
+    `Penerima Naik Pangkat (${allAttendance.filter(r => r.tab === 'pangkat').length} orang)`,
+
+  pesara:
+    `Penerima Pesara (${allAttendance.filter(r => r.tab === 'pesara').length} orang)`
+
+};
+
+      const categories = ['MAPeNS'];
 
       categories.forEach(category => {
         const records = allAttendance.filter(r => r.tab === category);
@@ -572,15 +1216,32 @@ setTimeout(() => {
           let textColor = '#e8d5a3';
           let secondaryColor = '#8a7a5a';
           
-          if (record.attendance_status === 'present') {
-            rowBackground = 'rgba(96,192,128,0.15)';
-            rowBorder = 'rgba(96,192,128,0.4)';
-          } else if (record.attendance_status === 'absent') {
-            rowBackground = '#ff0000';
-            rowBorder = '#ff0000';
-            textColor = '#ffffff';
-            secondaryColor = '#ffffff';
-          }
+         if (
+  record.attendance_status === 'present' ||
+  record.attendance_status === 'Hadir'
+) {
+
+  // HIJAU
+  rowBackground = 'rgba(96,192,128,0.18)';
+  rowBorder = 'rgba(96,192,128,0.45)';
+
+  textColor = '#d8ffe4';
+  secondaryColor = '#9fe0b3';
+
+}
+else if (
+  record.attendance_status === 'absent' ||
+  record.attendance_status === 'Tidak Hadir'
+) {
+
+  // MERAH MUDA
+  rowBackground = 'rgba(255,120,140,0.18)';
+  rowBorder = 'rgba(255,120,140,0.45)';
+
+  textColor = '#ffdbe2';
+  secondaryColor = '#ffb3bf';
+
+}
           row.style.cssText = `background: ${rowBackground}; border: 1px solid ${rowBorder};`;
 
           const timeText = record.check_in_time ? `<div class="text-xs mt-1" style="color: ${secondaryColor};">Masa: ${record.check_in_time}</div>` : '';
@@ -625,14 +1286,23 @@ setTimeout(() => {
     }
 
     function toggleAttendance(id, status) {
-      const record = allRecords.find(r => r.id === id);
+      const record = allRecords.find(r => r.id == id);
       if (record) {
         if (record.attendance_status === status) {
           record.attendance_status = '';
           record.check_in_time = '';
         } else {
-          record.attendance_status = status;
+          record.attendance_status = status === 'present' ? 'Hadir' : 'Tidak Hadir';
           record.check_in_time = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
+fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    action: "attendance",
+    id: record.id,
+    attendance_status: record.attendance_status,
+    check_in_time: record.check_in_time
+  })
+});
         }
         updateAttendanceView();
       }
@@ -650,13 +1320,18 @@ setTimeout(() => {
       const addDataContainer = document.getElementById('addDataButtonContainer');
       const qrContainer = document.getElementById('qrButtonContainer');
       
-      if (addDataContainer) {
-        if (isAdminMode && canCreate() && currentTab !== 'kehadiran') {
-          addDataContainer.style.display = 'flex';
-        } else {
-          addDataContainer.style.display = 'none';
-        }
-      }
+     if (addDataContainer) {
+  if (
+    isAdminMode &&
+    canCreate() &&
+    currentTab !== 'kehadiran' &&
+    currentTab !== 'pengunjung'
+  ) {
+    addDataContainer.style.display = 'flex';
+  } else {
+    addDataContainer.style.display = 'none';
+  }
+}
 
       if (qrContainer) {
         if (isAdminMode && canAttendance() && currentTab === 'kehadiran') {
@@ -678,71 +1353,195 @@ setTimeout(() => {
       document.getElementById('formModal').classList.remove('hidden');
     }
 
-    function editData(id) {
-      const record = allRecords.find(r => r.id === id);
-      if (!record) return;
-      
-      document.getElementById('formMode').value = 'edit';
-      document.getElementById('modalTitle').textContent = 'Edit Data';
-      document.getElementById('formName').value = record.name;
-      document.getElementById('formSchool').value = record.school;
-      document.getElementById('formRole').value = record.role;
-      document.getElementById('formNote').value = record.note;
-      document.getElementById('formIndex').value = id;
-      document.getElementById('formModal').classList.remove('hidden');
-    }
+   function editData(id) {
+
+  console.log("EDIT ID:", id);
+  console.log(allRecords);
+
+  const record = allRecords.find(r => r.id == id);
+
+  if (!record) {
+    alert("Data tidak dijumpai");
+    return;
+  }
+
+  document.getElementById('formMode').value = 'edit';
+  document.getElementById('modalTitle').textContent = 'Edit Data';
+  document.getElementById('formName').value = record.name;
+  document.getElementById('formSchool').value = record.school;
+  document.getElementById('formRole').value = record.role;
+  document.getElementById('formNote').value = record.note;
+document.getElementById('formPhoto').value =
+  record.photo || '';
+document.getElementById('formTable').value = record.table || ''; document.getElementById('formSeat').value = record.seat || '';
+  document.getElementById('formIndex').value = id;
+
+  document.getElementById('formModal')
+          .classList.remove('hidden');
+}
 
     function closeForm() {
       document.getElementById('formModal').classList.add('hidden');
       document.getElementById('dataForm').reset();
     }
 
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      const mode = document.getElementById('formMode').value;
-      const name = document.getElementById('formName').value;
-      const school = document.getElementById('formSchool').value;
-      const role = document.getElementById('formRole').value;
-      const note = document.getElementById('formNote').value;
+ function handleFormSubmit(e) {
 
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.6';
-      submitBtn.textContent = 'Simpan...';
+  e.preventDefault();
 
-      setTimeout(() => {
-        if (mode === 'add') {
-          allRecords.push({
-            id: Date.now().toString(),
-            tab: currentTab,
-            name,
-            school,
-            role,
-            note,
-            attendance_status: '',
-            check_in_time: ''
-          });
-        } else {
-          const idx = allRecords.findIndex(r => r.id === document.getElementById('formIndex').value);
-          if (idx !== -1) {
-            allRecords[idx] = {
-              ...allRecords[idx],
-              name,
-              school,
-              role,
-              note
-            };
-          }
-        }
+  const mode =
+    document.getElementById('formMode').value;
+
+  const name =
+    document.getElementById('formName').value;
+
+  const school =
+    document.getElementById('formSchool').value;
+
+  const role =
+    document.getElementById('formRole').value;
+
+  const note =
+    document.getElementById('formNote').value;
+const table = document.getElementById('formTable').value;
+ const seat = document.getElementById('formSeat').value;
+const photo =
+  document.getElementById('formPhoto').value;
+  const submitBtn =
+    e.target.querySelector('button[type="submit"]');
+
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.6';
+  submitBtn.textContent = 'Menyimpan...';
+
+  if (mode === 'add') {
+
+   const newRecord = 
+{ id: Date.now().toString(), 
+tab: currentTab, 
+name, 
+school, 
+role, 
+photo,
+note, 
+table, 
+seat, 
+attendance_status: '', 
+check_in_time: '' 
+};
+
+    fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "add",
+        ...newRecord
+      })
+    })
+    .then(r => r.json())
+    .then(response => {
+
+      console.log(response);
+
+      if(response.success){
+
+        allRecords.push(newRecord);
+
         closeForm();
         updateView();
 
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-        submitBtn.textContent = 'Simpan';
-      }, 300);
+      } else {
+
+        alert("Gagal simpan data");
+
+      }
+
+    })
+    .catch(err => {
+
+      console.error(err);
+
+      alert("Ralat sambungan Google Sheet");
+
+    })
+    .finally(() => {
+
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      submitBtn.textContent = 'Simpan';
+
+    });
+
+  } else {
+
+    const idx = allRecords.findIndex(
+      r => r.id === document.getElementById('formIndex').value
+    );
+
+    if (idx === -1) {
+
+      alert("Data tidak dijumpai");
+
+      submitBtn.disabled = false;
+      return;
+
     }
 
+const updatedRecord = {
+  ...allRecords[idx],
+  name,
+  school,
+  role,
+photo,
+  note,
+  table,
+  seat
+};
+
+
+
+    fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec", {
+      method: "POST",
+
+      body: JSON.stringify({
+        action: "update",
+        ...updatedRecord
+      })
+    })
+    .then(r => r.json())
+    .then(response => {
+
+      if(response.success){
+
+        allRecords[idx] = updatedRecord;
+
+        closeForm();
+        updateView();
+
+      } else {
+
+        alert("Gagal update data");
+
+      }
+
+    })
+    .catch(err => {
+
+      console.error(err);
+
+      alert("Ralat sambungan Google Sheet");
+
+    })
+    .finally(() => {
+
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      submitBtn.textContent = 'Simpan';
+
+    });
+
+  }
+
+}
     function showDeleteConfirm(id) {
       deleteTarget = id;
       document.getElementById('deleteModal').classList.remove('hidden');
@@ -761,15 +1560,35 @@ setTimeout(() => {
       deleteBtn.textContent = 'Mempadam...';
 
       setTimeout(() => {
-        allRecords = allRecords.filter(r => r.id !== deleteTarget);
-        closeDeleteModal();
-        updateView();
 
-        deleteBtn.disabled = false;
-        deleteBtn.style.opacity = '1';
-        deleteBtn.textContent = 'Padam';
-      }, 300);
+  fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "delete",
+      id: deleteTarget
+    })
+  })
+  .then(r => r.json())
+  .then(response => {
+
+    if(response.success){
+
+      allRecords =
+        allRecords.filter(r => r.id !== deleteTarget);
+
+      closeDeleteModal();
+      updateView();
+
     }
+
+    deleteBtn.disabled = false;
+    deleteBtn.style.opacity = '1';
+    deleteBtn.textContent = 'Padam';
+
+  });
+
+}, 300);
+}
 
     function hasPermission(permission) {
       if (!currentUserRole) return false;
@@ -939,7 +1758,7 @@ if (code && code.data) {
           };
           
           // Start detection loop
-         
+         detectQR();
         })
         .catch(err => {
           console.error('Camera access error:', err);
@@ -966,8 +1785,41 @@ if (code && code.data) {
         resultDiv.style.display = 'none';
       }, 2000);
     }
+function playBeep() {
 
+  const audioCtx =
+    new (window.AudioContext || window.webkitAudioContext)();
+
+  const oscillator =
+    audioCtx.createOscillator();
+
+  const gainNode =
+    audioCtx.createGain();
+
+  oscillator.type = 'sine';
+
+  oscillator.frequency.setValueAtTime(
+    900,
+    audioCtx.currentTime
+  );
+
+  gainNode.gain.setValueAtTime(
+    0.2,
+    audioCtx.currentTime
+  );
+
+  oscillator.connect(gainNode);
+
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioCtx.currentTime + 0.15
+  );
+}
     function processQRData(recordId) {
+playBeep();
       const record = allRecords.find(r => r.id === recordId);
       if (!record) {
         showQRError('❌ Data peserta tidak valid');
@@ -1000,12 +1852,23 @@ if (record.attendance_status === 'present') {
 }
 
 // Mark as present
-record.attendance_status = 'present';
-record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
-  hour: '2-digit',
-  minute: '2-digit'
-});
+record.attendance_status = 'Hadir';
 
+record.check_in_time =
+  new Date().toLocaleTimeString('ms-MY', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+fetch("https://script.google.com/macros/s/AKfycby1e70AEf_4Dt0ReOid72B0Dl8PJ-4ori4EPch8pP2xtUGLHbbZMLZjZYFEna86XbIn/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    action: "attendance",
+    id: record.id,
+    attendance_status: record.attendance_status,
+    check_in_time: record.check_in_time
+  })
+});
       const resultDiv = document.getElementById('qrResult');
       const resultText = document.getElementById('qrResultText');
 
@@ -1112,7 +1975,7 @@ record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
 
       // Reset to regular view when not on attendance tab
       if (currentTab === 'kehadiran') {
-        switchTab('mapen');
+        switchTab('MAPeNS');
       }
       
       updateView();
@@ -1128,7 +1991,7 @@ record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
       main_title: "Majlis Apresiasi\nPengurusan Sekolah",
       event_date: "15 Mac 2026",
       event_venue: "Dewan Komuniti Kota Marudu",
-      logo_mapen: "🎖️",
+      logo_MAPeNS: "🎖️",
       logo_apc: "🏅",
       logo_pangkat: "📈",
       logo_pesara: "💝",
@@ -1185,7 +2048,7 @@ record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
         ["main_title", config.main_title || defaultConfig.main_title],
         ["event_date", config.event_date || defaultConfig.event_date],
         ["event_venue", config.event_venue || defaultConfig.event_venue],
-        ["logo_mapen", config.logo_mapen || defaultConfig.logo_mapen],
+        ["logo_MAPeNS", config.logo_MAPeNS || defaultConfig.logo_MAPeNS],
         ["logo_apc", config.logo_apc || defaultConfig.logo_apc],
         ["logo_pangkat", config.logo_pangkat || defaultConfig.logo_pangkat],
         ["logo_pesara", config.logo_pesara || defaultConfig.logo_pesara],
@@ -1195,12 +2058,228 @@ record.check_in_time = new Date().toLocaleTimeString('ms-MY', {
     document.addEventListener('DOMContentLoaded', () => {
       const actionBtn = document.querySelector('[onclick="toggleAddForm()"]').parentElement;
       actionBtn.style.display = 'none';
-      switchTab('mapen');
+      switchTab('MAPeNS');
       lucide.createIcons();
     });
 
-    switchTab('mapen');
+    switchTab('MAPeNS');
     lucide.createIcons();
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f0d87d3c538473c',t:'MTc3Njk1NDI1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+function openSeatMap(id) {
+
+  const record = allRecords.find(r => r.id == id);
+
+  if (!record) return;
+
+  document.getElementById('seatMapContent').innerHTML = `
+
+    <div class="text-center">
+
+      <h2 style="color:#e8d5a3; font-size:20px; font-weight:bold;">
+        ${record.name}
+      </h2>
+
+      <p style="color:#8a7a5a;">
+        ${record.table} • ${record.seat}
+      </p>
+
+      <div class="mt-4 overflow-hidden rounded-xl"
+           style="border:1px solid rgba(74,154,255,0.2);">
+
+        <img 
+          src="${record.seat_map_url}"
+          style="width:100%; display:block;"
+        >
+
+      </div>
+
+      <a href="${record.seat_map_url}"
+         target="_blank"
+         class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg text-sm font-semibold"
+         style="background:#4a9aff; color:white;">
+
+         <i data-lucide="external-link"
+            style="width:16px;height:16px;"></i>
+
+         Buka Full Map
+      </a>
+
+    </div>
+  `;
+
+  document.getElementById('seatMapModal')
+          .classList.remove('hidden');
+
+  lucide.createIcons();
+}  
+function closeSeatMap() {
+
+  const modal = document.getElementById('seatMapModal');
+
+  modal.classList.add('hidden');
+
+}
+function showOnStage(id){
+if(!isAdminMode){
+    alert("Akses ditolak. Admin sahaja.");
+    return;
+  }
+
+  fetch("https://script.google.com/macros/s/AKfycby1e70AEf_4Dt0ReOid72B0Dl8PJ-4ori4EPch8pP2xtUGLHbbZMLZjZYFEna86XbIn/exec",{
+    method:"POST",
+    body:JSON.stringify({
+      action:"showSlide",
+      id:id
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+
+    if(res.success){
+
+      alert("Penerima dipaparkan di LCD Pentas");
+
+    }
+
+  })
+  .catch(err => {
+
+    console.error(err);
+
+  });
+
+}
+function handleSeatModalClick(event) {
+
+  const modal = document.getElementById('seatMapModal');
+
+  // klik background sahaja
+  if (event.target === modal) {
+
+    closeSeatMap();
+
+  }
+}
+function addVisitor() {
+
+  const input =
+    document.getElementById('visitorName');
+
+  const name = input.value.trim();
+
+  if (!name) return;
+
+  visitors.unshift({
+    id: Date.now(),
+    name,
+    time: new Date().toLocaleTimeString('ms-MY', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  });
+
+  input.value = '';
+
+  renderVisitors();
+}
+
+function renderVisitors() {
+
+  const content =
+    document.getElementById('visitorContent');
+
+  if (!content) return;
+
+  if (visitors.length === 0) {
+
+    content.innerHTML = `
+      <div class="text-center py-8"
+           style="color:#8a7a5a;">
+
+        Belum ada pengunjung hadir
+
+      </div>
+    `;
+
+    return;
+  }
+
+  content.innerHTML = visitors.map(v => `
+
+    <div class="rounded-lg p-4 flex items-center justify-between"
+         style="background:#161630;
+                border:1px solid rgba(184,134,11,0.15);">
+
+      <div>
+
+        <div style="color:#e8d5a3;
+                    font-weight:600;">
+
+          ${v.name}
+
+        </div>
+
+        <div style="color:#8a7a5a;
+                    font-size:12px;
+                    margin-top:4px;">
+
+          ${v.time}
+
+        </div>
+
+      </div>
+
+      <div class="px-3 py-1 rounded-full text-xs"
+           style="background:rgba(96,192,128,0.15);
+                  color:#60c080;">
+
+        HADIR
+
+      </div>
+
+    </div>
+
+  `).join('');
+}
+function downloadQR(qrId, name){
+
+  const canvas =
+    document.getElementById(qrId);
+
+  const link =
+    document.createElement('a');
+
+  link.download =
+    `${name}-QR.png`;
+
+  link.href =
+    canvas.toDataURL("image/png");
+
+  link.click();
+
+}
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f0d87d3c538473c',t:'MTc3Njk1NDI1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><div id="seatMapModal"
+     onclick="handleSeatModalClick(event)"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     style="background: rgba(0,0,0,0.8);">
+
+  <div class="w-full max-w-lg rounded-xl p-6"
+       style="background:#161630; border:1px solid rgba(74,154,255,0.25);">
+
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-heading text-xl font-bold"
+          style="color:#4a9aff;">
+        Map Tempat Duduk
+      </h3>
+
+      <button onclick="closeSeatMap()">
+        <i data-lucide="x"
+           style="width:20px;height:20px;color:#4a9aff;"></i>
+      </button>
+    </div>
+
+    <div id="seatMapContent"></div>
+
+  </div>
+</div></body>
 </html>
