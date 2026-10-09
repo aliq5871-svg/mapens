@@ -641,24 +641,35 @@ section .grid.grid-cols-2.md\:grid-cols-4>div:nth-child(n+2):nth-child(-n+4){dis
       <div class="anim-fade anim-d4 flex items-center justify-center gap-4 mb-6"><span class="block w-16 h-px" style="background: #c9a227;"></span> <span class="text-2xl" style="color: #d4af37;">✦</span> <span class="block w-16 h-px" style="background: #c9a227;"></span>
       </div>
       <p class="anim-fade anim-d5 font-heading text-xl md:text-2xl italic mb-2" style="color: #e8d5a3;">Tahun 2026</p>
-      <div class="anim-fade anim-d6 mt-8 inline-flex flex-col sm:flex-row gap-4 text-sm" style="color: #a89870;"><span class="flex items-center gap-2 justify-center"> <i data-lucide="calendar" style="width:16px;height:16px;color:#c9a227;"></i> <span id="eventDate">15 Mac 2026</span> </span> <span class="hidden sm:inline" style="color:#c9a227;">|</span> <span class="flex items-center gap-2 justify-center"> <i data-lucide="map-pin" style="width:16px;height:16px;color:#c9a227;"></i> <span id="eventVenue">Dewan Komuniti Kota Marudu</span> </span>
+      <div class="anim-fade anim-d6 mt-8 inline-flex flex-col sm:flex-row gap-4 text-sm" style="color: #a89870;"><span class="flex items-center gap-2 justify-center"> <i data-lucide="calendar" style="width:16px;height:16px;color:#c9a227;"></i> <span id="eventDate">23 Oktober 2026</span> </span> <span class="hidden sm:inline" style="color:#c9a227;">|</span> <span class="flex items-center gap-2 justify-center"> <i data-lucide="map-pin" style="width:16px;height:16px;color:#c9a227;"></i> <span id="eventVenue">Dewan AQ Kota Marudu</span> </span>
       </div>
      </div>
      <div class="w-full h-px" style="background: linear-gradient(90deg, transparent, #b8860b, #ffd700, #b8860b, transparent);"></div>
     </header>
     
 <section class="py-12" style="background: linear-gradient(180deg, #0a0a14 0%, #15141f 50%, #0a0a14 100%);">
-  <div class="flex justify-center">
-    <div class="anim-fade anim-d1 p-5 rounded-lg text-center" style="background: rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.15); min-width:320px; max-width:420px;">
+  <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="anim-fade anim-d1 p-5 rounded-lg text-center" style="background: rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.15); min-width:0;">
       <div class="font-heading text-4xl font-bold" style="color:#ffd700;" id="dashMAPeNS">0</div>
       <div class="text-xs mt-2 tracking-wider uppercase" style="color:#b8860b;">Penerima MAPeNS</div>
+    </div>
+    <div class="anim-fade anim-d2 p-5 rounded-lg text-center" style="background: rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.15); min-width:0;">
+      <div class="font-heading text-4xl font-bold" style="color:#ffd700;" id="dashPIBGPIBK">0</div>
+      <div class="text-xs mt-2 tracking-wider uppercase" style="color:#b8860b;">Penerima PIBG &amp; PIBK</div>
+    </div>
+    <div class="anim-fade anim-d3 p-5 rounded-lg text-center" style="background: rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.15); min-width:0;">
+      <div class="font-heading text-4xl font-bold" style="color:#ffd700;" id="dashBISS">0</div>
+      <div class="text-xs mt-2 tracking-wider uppercase" style="color:#b8860b;">Penerima BiSS (Sekolah)</div>
     </div>
   </div>
 </section>
     <div class="w-full h-px" style="background: linear-gradient(90deg, transparent, #b8860b44, transparent);"></div>
     <section class="py-12" style="background: #0d0d1a;">
      <div class="max-w-5xl mx-auto px-4">
-      <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto" id="tabNav"><button onclick="switchTab('MAPeNS')" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all" data-tab="MAPeNS" style="background: #b8860b; color: #0d0d1a;"> <span class="flex items-center gap-2"><i data-lucide="award" style="width:16px;height:16px;"></i> MAPeNS</span> </button>    <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
+      <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto" id="tabNav"><button onclick="switchTab('MAPeNS')" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all" data-tab="MAPeNS" style="background: #b8860b; color: #0d0d1a;"> <span class="flex items-center gap-2"><i data-lucide="award" style="width:16px;height:16px;"></i> MAPeNS</span> </button>
+<button onclick="switchTab('PIBGPIBK')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="PIBGPIBK" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="users" style="width:16px;height:16px;"></i> PIBG &amp; PIBK</span></button>
+<button onclick="switchTab('BISS')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="BISS" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="school" style="width:16px;height:16px;"></i> BiSS</span></button>
+    <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
 <button onclick="switchTab('pengunjung')"
         class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide"
         data-tab="pengunjung"
@@ -905,6 +916,8 @@ let deleteTarget = null;
 
     const tabInfo = {
       MAPeNS: { title: "Penerima Anugerah MAPeNS", desc: "Menerima Anugerah Pengurusan Cemerlang", icon: "award" },
+      PIBGPIBK: { title: "Penerima PIBG & PIBK", desc: "Penghargaan kepada Persatuan Ibu Bapa dan Guru serta rakan komuniti sekolah", icon: "users" },
+      BISS: { title: "Penerima BiSS", desc: "Pengiktirafan kepada sekolah penerima Bimbingan Sekolah Sepadu", icon: "school" },
       apc: { title: "Penerima Anugerah APC", desc: "Anugerah Perkhidmatan Cemerlang", icon: "trophy" },
       pangkat: { title: "Penerima Kenaikan Pangkat", desc: "Tahniah atas kenaikan pangkat yang diterima", icon: "trending-up" },
       pesara: { title: "Penerima Pesara", desc: "Penghargaan atas jasa & dedikasi sepanjang perkhidmatan", icon: "heart" },
@@ -917,6 +930,8 @@ let deleteTarget = null;
 
     const colorSchemes = {
       MAPeNS: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)', border: 'rgba(255,215,0,0.2)' },
+      PIBGPIBK: { accent: '#60c080', badge: 'rgba(96,192,128,0.1)', border: 'rgba(96,192,128,0.2)' },
+      BISS: { accent: '#4a9aff', badge: 'rgba(74,154,255,0.1)', border: 'rgba(74,154,255,0.2)' },
       apc: { accent: '#c0a040', badge: 'rgba(192,160,64,0.1)', border: 'rgba(192,160,64,0.2)' },
       pangkat: { accent: '#60c080', badge: 'rgba(96,192,128,0.1)', border: 'rgba(96,192,128,0.2)' },
       pesara: { accent: '#e07070', badge: 'rgba(224,112,112,0.1)', border: 'rgba(224,112,112,0.2)' },
@@ -925,7 +940,9 @@ let deleteTarget = null;
 
     function updateDashboard() {
       // Update dashboard counts to always match actual data
-      document.getElementById('dashMAPeNS').textContent = allRecords.filter(r => r.tab === 'MAPeNS').length;
+      document.getElementById('dashMAPeNS').textContent = allRecords.filter(r => String(r.tab || '').trim().toUpperCase() === 'MAPENS').length;
+      document.getElementById('dashPIBGPIBK').textContent = allRecords.filter(r => String(r.tab || '').trim().toUpperCase() === 'PIBGPIBK').length;
+      document.getElementById('dashBISS').textContent = allRecords.filter(r => String(r.tab || '').trim().toUpperCase() === 'BISS').length;
 
     }
 
@@ -987,6 +1004,8 @@ if (currentTab === 'pengunjung') {
 
       const logoMap = {
         MAPeNS: window.elementSdk?.config?.logo_MAPeNS || defaultConfig.logo_MAPeNS,
+        PIBGPIBK: 'P',
+        BISS: 'B',
         apc: window.elementSdk?.config?.logo_apc || defaultConfig.logo_apc,
         pangkat: window.elementSdk?.config?.logo_pangkat || defaultConfig.logo_pangkat,
         pesara: window.elementSdk?.config?.logo_pesara || defaultConfig.logo_pesara
@@ -1124,11 +1143,10 @@ setTimeout(() => {
       .toLowerCase();
 
   return [
-    'mapen',
-    'mapens',
-    'apc',
-    'pangkat',
-    'pesara'
+    'mapen', 'mapens',
+    'pibgpibk', 'pibg & pibk', 'pibg dan pibk',
+    'biss', 'biss (sekolah)',
+    'apc', 'pangkat', 'pesara'
   ].includes(tab);
 
 });
@@ -1167,31 +1185,24 @@ const pending = allAttendance.filter(r =>
       // Group by category
       const categoryColors = {
         MAPeNS: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)' },
+        PIBGPIBK: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)' },
+        BISS: { accent: '#ffd700', badge: 'rgba(255,215,0,0.1)' },
         apc: { accent: '#c0a040', badge: 'rgba(192,160,64,0.1)' },
         pangkat: { accent: '#60c080', badge: 'rgba(96,192,128,0.1)' },
         pesara: { accent: '#e07070', badge: 'rgba(224,112,112,0.1)' }
       };
 
+      const normalizedTab = r => String(r.tab || '').trim().toUpperCase().replace(/[^A-Z]/g, '');
       const categoryTitles = {
+        MAPeNS: `Penerima MAPeNS (${allAttendance.filter(r => ['MAPEN','MAPENS'].includes(normalizedTab(r))).length} penerima)`,
+        PIBGPIBK: `Penerima PIBG & PIBK (${allAttendance.filter(r => ['PIBGPIBK','PIBGDANPIBK'].includes(normalizedTab(r))).length} penerima)`,
+        BISS: `Penerima BiSS — Sekolah (${allAttendance.filter(r => normalizedTab(r) === 'BISS').length} sekolah)`
+      };
 
-  MAPeNS:
-    `Penerima MAPeNS (${allAttendance.filter(r => r.tab === 'MAPeNS').length} orang)`,
-
-  apc:
-    `Penerima APC (${allAttendance.filter(r => r.tab === 'apc').length} orang)`,
-
-  pangkat:
-    `Penerima Naik Pangkat (${allAttendance.filter(r => r.tab === 'pangkat').length} orang)`,
-
-  pesara:
-    `Penerima Pesara (${allAttendance.filter(r => r.tab === 'pesara').length} orang)`
-
-};
-
-      const categories = ['MAPeNS'];
+      const categories = ['MAPeNS', 'PIBGPIBK', 'BISS'];
 
       categories.forEach(category => {
-        const records = allAttendance.filter(r => r.tab === category);
+        const records = allAttendance.filter(r => { const t = String(r.tab || '').trim().toUpperCase().replace(/[^A-Z]/g, ''); return category === 'MAPeNS' ? ['MAPEN','MAPENS'].includes(t) : category === 'PIBGPIBK' ? ['PIBGPIBK','PIBGDANPIBK'].includes(t) : t === 'BISS'; });
         if (records.length === 0) return;
 
         // Add category header
@@ -1306,6 +1317,17 @@ fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1
         }
         updateAttendanceView();
       }
+    }
+
+    function updateFormLabels() {
+      const isSchoolRecipient = ['BISS','PIBGPIBK'].includes(currentTab);
+      const nameLabel = document.querySelector('label[for="formName"]') || document.getElementById('formName')?.previousElementSibling;
+      if (nameLabel) nameLabel.textContent = isSchoolRecipient ? 'Nama Sekolah / Organisasi' : 'Nama';
+      const nameInput = document.getElementById('formName');
+      if (nameInput) nameInput.placeholder = isSchoolRecipient ? 'Masukkan nama sekolah atau organisasi' : 'Nama lengkap';
+      const roleInput = document.getElementById('formRole');
+      if (roleInput && isSchoolRecipient) roleInput.placeholder = 'Contoh: Sekolah Penerima BiSS';
+      else if (roleInput) roleInput.placeholder = 'Contoh: Guru Besar';
     }
 
     function switchTab(tab) {
@@ -1988,7 +2010,7 @@ fetch("https://script.google.com/macros/s/AKfycby1e70AEf_4Dt0ReOid72B0Dl8PJ-4ori
 
     // --- Element SDK ---
     const defaultConfig = {
-      main_title: "Majlis Apresiasi\nPengurusan Sekolah",
+      main_title: "Majlis Apresiasi\Pengurusan Sekolah",
       event_date: "23 Oktober 2026",
       event_venue: "Dewan AQ Kota Marudu",
       logo_MAPeNS: "🎖️",
