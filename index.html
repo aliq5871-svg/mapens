@@ -350,6 +350,20 @@ setInterval(() => {
     .attendance-row { transition: all 0.2s ease; }
     .attendance-row:hover { background: rgba(212,175,55,0.08); }
 
+    /* Atur cara tema biru diraja dan emas */
+    #agendaPanel { background:linear-gradient(145deg,#061633,#09295a 55%,#06142d); border:1px solid rgba(244,215,123,.65); box-shadow:0 15px 45px rgba(0,0,0,.3); }
+    .agenda-header { background:linear-gradient(135deg,rgba(3,15,39,.95),rgba(15,55,112,.9)); border:1px solid #c9a227; box-shadow:inset 0 0 0 3px rgba(201,162,39,.12); }
+    .agenda-meta > div { padding:12px 10px; border:1px solid rgba(244,215,123,.4); border-radius:10px; background:rgba(2,12,31,.45); }
+    .agenda-meta span { display:block; color:#d9bd68; font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; margin-bottom:5px; }
+    .agenda-meta strong { color:#fff5d6; font-weight:600; }
+    .agenda-item { display:grid; grid-template-columns:110px minmax(0,1fr); gap:16px; padding:16px; border:1px solid rgba(212,175,55,.38); border-radius:12px; background:rgba(2,12,31,.55); color:#f8f3e7; }
+    .agenda-item time { color:#ffd966; font-weight:800; white-space:nowrap; }
+    .agenda-item p { margin:0 0 6px; line-height:1.55; }
+    .agenda-item p:last-child { margin-bottom:0; }
+    .agenda-item ol { margin:5px 0 8px; padding-left:1.4rem; list-style:decimal; }
+    .agenda-item li { padding:2px 0; }
+    @media(max-width:520px){ .agenda-item{grid-template-columns:1fr;gap:7px;padding:13px;} .agenda-item time{font-size:1rem;} #agendaPanel{padding:12px;} }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #000000; }
     ::-webkit-scrollbar-thumb { background: #c9a227; border-radius: 3px; }
@@ -738,6 +752,7 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
       <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto" id="tabNav"><button onclick="switchTab('MAPeNS')" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all" data-tab="MAPeNS" style="background: #b8860b; color: #0d0d1a;"> <span class="flex items-center gap-2"><i data-lucide="award" style="width:16px;height:16px;"></i> MAPeNS</span> </button>
 <button onclick="switchTab('PIBGPIBK')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="PIBGPIBK" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="users" style="width:16px;height:16px;"></i> PIBG &amp; PIBK</span></button>
 <button onclick="switchTab('BISS')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="BISS" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="school" style="width:16px;height:16px;"></i> BiSS</span></button>
+<button onclick="switchTab('aturcara')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="aturcara" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="calendar-clock" style="width:16px;height:16px;"></i> Atur Cara Majlis</span></button>
     <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
 <button onclick="switchTab('pengunjung')"
         class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide"
@@ -791,6 +806,32 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
       <div id="recipientGrid"
      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
      style="display:grid;">
+</div>
+
+<!-- ATUR CARA MAJLIS MAPeNS 2026 -->
+<div id="agendaPanel" style="display:none;" class="mt-6 rounded-2xl p-4 sm:p-8">
+  <div class="agenda-header text-center rounded-xl p-5 sm:p-7 mb-6">
+    <div class="text-xs sm:text-sm tracking-[0.25em] uppercase mb-2" style="color:#f4d77b;">Majlis Apresiasi Pengurusan Sekolah (MAPeNS)</div>
+    <h3 class="font-heading text-3xl sm:text-4xl font-bold mb-3" style="color:#ffd966;">Atur Cara Majlis</h3>
+    <div class="text-sm sm:text-base font-semibold" style="color:#fff4cf;">Peringkat Pejabat Pendidikan Daerah Kota Marudu Tahun 2026</div>
+    <div class="agenda-meta mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+      <div><span>Tarikh</span><strong>23 Oktober 2026</strong></div>
+      <div><span>Tempat</span><strong>Dewan AQ Pekan Kota Marudu</strong></div>
+      <div><span>Masa</span><strong>6.30 PM hingga 11.30 PM</strong></div>
+    </div>
+  </div>
+  <div class="space-y-3">
+    <div class="agenda-item"><time>6.00 PM</time><div><p>Ketibaan semua AJK Pelaksana</p><p>Pendaftaran</p></div></div>
+    <div class="agenda-item"><time>7.00 PM</time><div><p>Ketibaan Jemputan Khas</p></div></div>
+    <div class="agenda-item"><time>7.10 PM</time><div><p>Ketibaan PPD Kota Marudu</p></div></div>
+    <div class="agenda-item"><time>7.30 PM</time><div><p>Ketibaan Perasmi</p><p>YB Datuk Wetrom @ Mohd Fikri Bahanda, Ahli Parlimen P.168 Kota Marudu</p><p>Tarian Sambut Tamu</p><p>Nyanyian Lagu Negaraku</p><p>Nyanyian Lagu Sabah Tanah Airku</p><p>Bacaan doa</p></div></div>
+    <div class="agenda-item"><time>8.00 PM</time><div><p>Ucapan alu-aluan</p><p>En. Halim bin H. Bidin @ Bibin, Pegawai Pendidikan Daerah Kota Marudu</p><p>Ucapan Perasmian MAPeNS Tahun 2026</p><p>YB Datuk Wetrom @ Mohd Fikri Bahanda, Ahli Parlimen P.168 Kota Marudu</p><p>Gimik Perasmian</p><p>Penyampaian Cenderahati</p><p>Lafaz Ikrar Hari Guru</p><p>Nyanyian Lagu “Kami Guru Malaysia”</p><p>Jamuan makan malam</p></div></div>
+    <div class="agenda-item"><time>8.30 PM</time><div><p>Jamuan makan malam</p></div></div>
+    <div class="agenda-item"><time>9.30 PM</time><div><p>Persembahan</p></div></div>
+    <div class="agenda-item"><time>9.30 PM</time><div><p>Penyampaian Anugerah:</p><ol><li>Penyampaian Anugerah MAPeNS</li><li>Penyampaian Anugerah Khas PPDKM</li><li>Penyampaian Anugerah Tokoh Guru</li><li>Penyampaian Anugerah Tokoh Kepimpinan</li></ol><p>Sesi bergambar</p></div></div>
+    <div class="agenda-item"><time>11.30 PM</time><div><p>Bersurai</p></div></div>
+  </div>
+  <p class="text-center text-xs mt-6" style="color:#bca66b;">MARUDU HEBAT • DRIVE TO EXCELLENT</p>
 </div>
       </div><!-- Attendance List -->
     <div id="attendanceList" style="display:none;">
@@ -1007,6 +1048,7 @@ let deleteTarget = null;
       MAPeNS: { title: "Penerima Anugerah MAPeNS", desc: "Menerima Anugerah Pengurusan Cemerlang", icon: "award" },
       PIBGPIBK: { title: "Penerima PIBG & PIBK", desc: "Penghargaan kepada Persatuan Ibu Bapa dan Guru serta rakan komuniti sekolah", icon: "users" },
       BISS: { title: "Penerima BiSS", desc: "Pengiktirafan kepada sekolah penerima Bimbingan Sekolah Sepadu", icon: "school" },
+      aturcara: { title: "Atur Cara Majlis MAPeNS 2026", desc: "Tentatif perjalanan Majlis Apresiasi Pengurusan Sekolah", icon: "calendar-clock" },
       apc: { title: "Penerima Anugerah APC", desc: "Anugerah Perkhidmatan Cemerlang", icon: "trophy" },
       pangkat: { title: "Penerima Kenaikan Pangkat", desc: "Tahniah atas kenaikan pangkat yang diterima", icon: "trending-up" },
       pesara: { title: "Penerima Pesara", desc: "Penghargaan atas jasa & dedikasi sepanjang perkhidmatan", icon: "heart" },
@@ -1041,7 +1083,7 @@ let deleteTarget = null;
       document.getElementById('sectionDesc').textContent = info.desc;
      document.getElementById('recipientGrid').style.display =
   currentTab === 'kehadiran' ||
-  currentTab === 'pengunjung'
+  currentTab === 'pengunjung' || currentTab === 'aturcara'
     ? 'none'
     : 'grid';
 document.getElementById('attendanceList').style.display =
@@ -1053,6 +1095,7 @@ document.getElementById('visitorList').style.display =
   currentTab === 'pengunjung'
     ? 'block'
     : 'none';
+document.getElementById('agendaPanel').style.display = currentTab === 'aturcara' ? 'block' : 'none';
 const visitorSection =
   document.getElementById('visitorList');
 
@@ -1078,6 +1121,8 @@ if (currentTab === 'pengunjung') {
 
   renderVisitors();
 
+} else if (currentTab === 'aturcara') {
+  // Paparkan panel atur cara statik tanpa memuatkan rekod penerima.
 } else {
 
   updateRegularView();
@@ -1436,7 +1481,8 @@ fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1
     isAdminMode &&
     canCreate() &&
     currentTab !== 'kehadiran' &&
-    currentTab !== 'pengunjung'
+    currentTab !== 'pengunjung' &&
+    currentTab !== 'aturcara'
   ) {
     addDataContainer.style.display = 'flex';
   } else {
