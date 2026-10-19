@@ -987,7 +987,7 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
       <div id="qrResult" style="display: none; margin-top: 16px; padding: 12px; border-radius: 8px; text-align: center;">
        <p id="qrResultText" style="color: #60c080; font-weight: bold; margin: 0;"></p>
       </div>
-      <div class="flex gap-3 mt-6"><button onclick="closeQRScanner()" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold" style="background: rgba(74,154,255,0.12); color: #4a9aff;">Tutup</button>
+      <div class="flex gap-3 mt-6"><button onclick="unlockQRAudio().then(ok => { if(ok) playBeep(); else alert('Audio tidak aktif. Semak tetapan bunyi pelayar/peranti.'); })" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold" style="background: rgba(212,175,55,0.18); color: #ffd966; border:1px solid #c9a227;">🔊 Uji Bunyi</button><button onclick="closeQRScanner()" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold" style="background: rgba(74,154,255,0.12); color: #4a9aff;">Tutup</button>
       </div>
      </div>
     </div>
@@ -1938,16 +1938,16 @@ if (code && code.data) {
     }
 let qrAudioContext = null;
 
-// Buka kebenaran audio ketika pengguna menekan butang buka pengimbas.
-// Ini membantu Chrome/telefon membenarkan bunyi automatik selepas QR dikesan.
-function unlockQRAudio() {
+async function unlockQRAudio() {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!qrAudioContext) qrAudioContext = new AudioContextClass();
-    if (qrAudioContext.state === 'suspended') qrAudioContext.resume();
+    if (!AudioContextClass) return false;
+    if (!qrAudioContext || qrAudioContext.state === 'closed') qrAudioContext = new AudioContextClass();
+    if (qrAudioContext.state !== 'running') await qrAudioContext.resume();
+    return qrAudioContext.state === 'running';
   } catch (err) {
     console.warn('Audio QR tidak tersedia:', err);
+    return false;
   }
 }
 
@@ -1955,30 +1955,28 @@ function playBeep() {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
-    if (!qrAudioContext) qrAudioContext = new AudioContextClass();
-
+    if (!qrAudioContext || qrAudioContext.state === 'closed') qrAudioContext = new AudioContextClass();
     const ctx = qrAudioContext;
     const sound = () => {
-      const oscillator = ctx.createOscillator();
-      const gain = ctx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(1000, ctx.currentTime);
-      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.28, ctx.currentTime + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.20);
-      oscillator.connect(gain);
-      gain.connect(ctx.destination);
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + 0.22);
+      try {
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(1200, ctx.currentTime);
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.45, ctx.currentTime + 0.01);
+        gain.gain.setValueAtTime(0.45, ctx.currentTime + 0.10);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.24);
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + 0.25);
+      } catch (err) { console.warn('Gagal menghasilkan beep:', err); }
     };
-
-    const resumeAndPlay = ctx.state === 'suspended' ? ctx.resume() : Promise.resolve();
-    resumeAndPlay.then(() => {
-      if (ctx.state === 'running') sound();
-    }).catch(err => console.warn('Tidak dapat memainkan bunyi QR:', err));
-  } catch (err) {
-    console.warn('Bunyi QR tidak tersedia:', err);
-  }
+    if (ctx.state === 'running') sound();
+    else ctx.resume().then(() => { if (ctx.state === 'running') sound(); })
+      .catch(err => console.warn('Audio QR disekat pelayar:', err));
+  } catch (err) { console.warn('Bunyi QR tidak tersedia:', err); }
 }
     function processQRData(recordId) {
 playBeep();
