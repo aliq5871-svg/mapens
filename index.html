@@ -1757,6 +1757,8 @@ photo,
     let qrDetectionLoop = null;
 
     function toggleQRScanner() {
+      // Audio diaktifkan melalui tindakan pengguna supaya bunyi beep tidak disekat pelayar.
+      unlockQRAudio();
       if (qrScannerActive) {
         closeQRScanner();
       } else {
@@ -1934,38 +1936,49 @@ if (code && code.data) {
         resultDiv.style.display = 'none';
       }, 2000);
     }
+let qrAudioContext = null;
+
+// Buka kebenaran audio ketika pengguna menekan butang buka pengimbas.
+// Ini membantu Chrome/telefon membenarkan bunyi automatik selepas QR dikesan.
+function unlockQRAudio() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!qrAudioContext) qrAudioContext = new AudioContextClass();
+    if (qrAudioContext.state === 'suspended') qrAudioContext.resume();
+  } catch (err) {
+    console.warn('Audio QR tidak tersedia:', err);
+  }
+}
+
 function playBeep() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!qrAudioContext) qrAudioContext = new AudioContextClass();
 
-  const audioCtx =
-    new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = qrAudioContext;
+    const sound = () => {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(1000, ctx.currentTime);
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.28, ctx.currentTime + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.20);
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.22);
+    };
 
-  const oscillator =
-    audioCtx.createOscillator();
-
-  const gainNode =
-    audioCtx.createGain();
-
-  oscillator.type = 'sine';
-
-  oscillator.frequency.setValueAtTime(
-    900,
-    audioCtx.currentTime
-  );
-
-  gainNode.gain.setValueAtTime(
-    0.2,
-    audioCtx.currentTime
-  );
-
-  oscillator.connect(gainNode);
-
-  gainNode.connect(audioCtx.destination);
-
-  oscillator.start();
-
-  oscillator.stop(
-    audioCtx.currentTime + 0.15
-  );
+    const resumeAndPlay = ctx.state === 'suspended' ? ctx.resume() : Promise.resolve();
+    resumeAndPlay.then(() => {
+      if (ctx.state === 'running') sound();
+    }).catch(err => console.warn('Tidak dapat memainkan bunyi QR:', err));
+  } catch (err) {
+    console.warn('Bunyi QR tidak tersedia:', err);
+  }
 }
     function processQRData(recordId) {
 playBeep();
