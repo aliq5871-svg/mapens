@@ -1162,7 +1162,7 @@ const qrId = `qr-${record.id}`; // ✅ LETAK SINI
 </canvas>
 
   <button
-    onclick="downloadQR('${qrId}','${record.name}')"
+    onclick="viewQR('${qrId}','${record.id}',decodeURIComponent('${encodeURIComponent(String(record.name || 'Peserta'))}'))"
     class="mt-3 px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 mx-auto"
     style="
       background:rgba(96,192,128,0.15);
@@ -1170,10 +1170,9 @@ const qrId = `qr-${record.id}`; // ✅ LETAK SINI
       border:1px solid rgba(96,192,128,0.25);
     "
   >
-    <i data-lucide="download"
+    <i data-lucide="qr-code"
        style="width:14px;height:14px;"></i>
-
-    Download QR
+    Lihat QR
   </button>
 
 </div>
@@ -2400,23 +2399,37 @@ function renderVisitors() {
 
   `).join('');
 }
-function downloadQR(qrId, name){
-
-  const canvas =
-    document.getElementById(qrId);
-
-  const link =
-    document.createElement('a');
-
-  link.download =
-    `${name}-QR.png`;
-
-  link.href =
-    canvas.toDataURL("image/png");
-
-  link.click();
-
+function viewQR(qrId, recordId, name) {
+  const modal = document.getElementById('viewQRModal');
+  const title = document.getElementById('viewQRName');
+  const canvas = document.getElementById('viewQRCanvas');
+  if (!modal || !canvas || !window.QRCode) {
+    alert('QR tidak dapat dipaparkan. Sila muat semula halaman.');
+    return;
+  }
+  title.textContent = name || 'QR Kehadiran';
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  QRCode.toCanvas(canvas, String(recordId), {
+    width: 320,
+    margin: 2,
+    color: { dark: '#000000', light: '#ffffff' },
+    errorCorrectionLevel: 'H'
+  }, function(error) {
+    if (error) {
+      console.error('Gagal menjana QR:', error);
+      alert('QR tidak dapat dijana. Sila cuba lagi.');
+    }
+  });
 }
+function closeViewQR() {
+  const modal = document.getElementById('viewQRModal');
+  if (modal) modal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') closeViewQR();
+});
 </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f0d87d3c538473c',t:'MTc3Njk1NDI1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><div id="seatMapModal"
      onclick="handleSeatModalClick(event)"
@@ -2441,5 +2454,26 @@ function downloadQR(qrId, name){
     <div id="seatMapContent"></div>
 
   </div>
-</div></body>
+</div>
+
+<!-- Paparan QR peserta: boleh dilihat terus pada telefon tanpa muat turun -->
+<div id="viewQRModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+     style="background:rgba(0,0,0,.88);" onclick="if(event.target===this) closeViewQR()">
+  <div class="w-full max-w-sm rounded-2xl p-6 text-center"
+       style="background:#09295a;border:1px solid #d4af37;box-shadow:0 15px 50px rgba(0,0,0,.5);">
+    <div class="flex justify-end">
+      <button type="button" onclick="closeViewQR()" aria-label="Tutup QR"
+        style="color:#e8d5a3;font-size:26px;line-height:1;">&times;</button>
+    </div>
+    <h2 id="viewQRName" class="font-bold text-xl mb-2" style="color:#e8d5a3;">QR Kehadiran</h2>
+    <p class="text-sm mb-4" style="color:#c9a227;">Tunjukkan kod ini kepada urus setia untuk imbasan kehadiran</p>
+    <div class="rounded-xl p-3 inline-block" style="background:#ffffff;">
+      <canvas id="viewQRCanvas" style="display:block;width:min(70vw,280px);height:auto;"></canvas>
+    </div>
+    <p class="text-xs mt-4" style="color:#d1d5db;">Tidak perlu muat turun. Buka paparan ini pada telefon anda.</p>
+    <button type="button" onclick="closeViewQR()" class="mt-4 w-full rounded-lg py-3 font-semibold"
+      style="background:#c9a227;color:#061633;">Tutup</button>
+  </div>
+</div>
+</body>
 </html>
