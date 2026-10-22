@@ -668,7 +668,7 @@ section .grid.grid-cols-2.md\:grid-cols-4>div:nth-child(n+2):nth-child(-n+4){dis
       <button type="button" onclick="closeOverallSeatPlan()" class="rounded-lg px-3 py-2 font-semibold" style="background:rgba(212,175,55,.15);color:#ffd700;" aria-label="Tutup pelan">✕ Tutup</button>
     </div>
     <div style="overflow:auto;padding:12px;flex:1;">
-      <iframe src="https://i.imgur.com/oUtSnZO/embed?pub=true" title="Pelan tempat duduk MAPeNS 2026" loading="lazy" allowfullscreen style="display:block;width:100%;height:min(72vh,800px);border:0;border-radius:10px;background:#fff;"></iframe>
+      <iframe src="https://i.imgur.com/n5tpm26/embed?pub=true" title="Pelan tempat duduk MAPeNS 2026" loading="lazy" allowfullscreen style="display:block;width:100%;height:min(72vh,800px);border:0;border-radius:10px;background:#fff;"></iframe>
       <p class="text-xs text-center mt-3" style="color:#a89870;">Jika pelan tidak dimuatkan oleh Imgur, <a href="https://imgur.com/a/ByZxQ2J" target="_blank" rel="noopener noreferrer" style="color:#ffd700;text-decoration:underline;">buka pelan di Imgur</a>.</p>
     </div>
   </div>
@@ -976,59 +976,31 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
     };
 
     let allRecords = [];
-let isRefreshingRecords = false;
-let lastRecordsRefresh = 0;
 
-// Muat semula data daripada Google Sheets tanpa memuat semula seluruh halaman.
-async function refreshRecords(silent = true) {
-  if (isRefreshingRecords) return;
-  // Elakkan mengganggu borang/operasi Admin yang sedang dibuat.
-  if (isAdminMode) return;
+fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec")
+  .then(r => r.json())
+  .then(data => {
 
-  isRefreshingRecords = true;
-  try {
-    const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec?ts=" + Date.now(),
-      { cache: "no-store" }
-    );
-    if (!response.ok) throw new Error("Gagal mendapatkan data (" + response.status + ")");
-    const data = await response.json();
-    if (!Array.isArray(data)) throw new Error("Format data tidak sah");
+   allRecords = data.map(r => ({
 
-    allRecords = data.map(r => ({
-      ...r,
-      id: String(r.id || '').trim(),
-      photo: String(r.photo || '').trim()
-    }));
+  ...r,
+
+  id: String(r.id || '').trim(),
+
+  photo: String(r.photo || '').trim()
+
+}));
 
     updateView();
     updateDashboard();
-    lastRecordsRefresh = Date.now();
-  } catch (error) {
-    console.warn("Auto refresh rekod gagal:", error);
-    if (!silent) alert("Data belum dapat dikemas kini. Sila semak sambungan internet dan cuba lagi.");
-  } finally {
-    isRefreshingRecords = false;
-  }
-}
 
-// Muat data ketika mula dibuka, kemudian kemas kini setiap 30 saat.
-// Tab yang tidak aktif tidak perlu membuat permintaan berulang.
-setInterval(() => {
-  if (!document.hidden) refreshRecords(true);
-}, 30000);
-
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) refreshRecords(true);
-});
+  });
 
 let visitors = [];
 let currentTab = 'MAPeNS';
 let isAdminMode = false;
 let currentUserRole = null;
 let deleteTarget = null;
-
-refreshRecords();
 
     const tabInfo = {
       MAPeNS: { title: "Penerima Anugerah MAPeNS", desc: "Menerima Anugerah Pengurusan Cemerlang", icon: "award" },
