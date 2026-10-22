@@ -999,25 +999,40 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
     };
 
     let allRecords = [];
+let autoRefreshBusy = false;
 
-fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec")
-  .then(r => r.json())
-  .then(data => {
+const MAPENS_DATA_URL = "https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1VMHeXnezuAYv8Dk1x6H7-JJ6gNMih8cRpE/exec";
 
-   allRecords = data.map(r => ({
+// Muat semula rekod daripada Google Apps Script tanpa memuat semula seluruh halaman.
+async function refreshMapensData(showErrors = false) {
+  if (autoRefreshBusy) return;
+  autoRefreshBusy = true;
+  try {
+    const response = await fetch(MAPENS_DATA_URL, { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error('Format data tidak sah');
 
-  ...r,
+    allRecords = data.map(r => ({
+      ...r,
+      id: String(r.id || '').trim(),
+      photo: String(r.photo || '').trim()
+    }));
 
-  id: String(r.id || '').trim(),
+    // Kemas kini paparan semasa dan angka dashboard; tab yang sedang dibuka dikekalkan.
+    if (typeof updateView === 'function') updateView();
+    if (typeof updateDashboard === 'function') updateDashboard();
+  } catch (error) {
+    console.warn('Auto-refresh MAPeNS gagal:', error);
+    if (showErrors) alert('Data belum dapat dikemas kini. Sila semak sambungan internet dan cuba lagi.');
+  } finally {
+    autoRefreshBusy = false;
+  }
+}
 
-  photo: String(r.photo || '').trim()
-
-}));
-
-    updateView();
-    updateDashboard();
-
-  });
+// Muatan awal dan auto-refresh setiap 30 saat.
+refreshMapensData();
+setInterval(() => refreshMapensData(), 30000);
 
 let visitors = [];
 let currentTab = 'MAPeNS';
