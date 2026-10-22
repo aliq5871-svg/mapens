@@ -960,7 +960,14 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
        <h3 class="font-heading font-bold text-xl" style="color: #4a9aff;">Scan QR Check-in</h3><button onclick="closeQRScanner()" class="p-1 hover:bg-gray-700 rounded-lg transition"><i data-lucide="x" style="width:20px;height:20px;color:#4a9aff;"></i></button>
       </div>
       <div id="qrReader" style="width: 100%; border: 1px solid rgba(74,154,255,0.3); border-radius: 8px; padding: 20px; text-align: center; background: rgba(74,154,255,0.05);">
-       <video id="qrVideo" style="width: 100%; max-width: 300px; border-radius: 4px; display: none;"></video>
+       <div id="qrCameraFrame" style="position:relative;width:100%;max-width:420px;margin:0 auto;border-radius:12px;overflow:hidden;background:#020817;min-height:180px;">
+       <video id="qrVideo" style="width:100%;max-width:420px;min-height:180px;max-height:55vh;object-fit:cover;border-radius:12px;display:none;" playsinline muted></video>
+       <div id="qrScanGuide" style="display:none;position:absolute;inset:0;pointer-events:none;align-items:center;justify-content:center;">
+        <div style="width:68%;aspect-ratio:1;border:3px solid #22c55e;border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.18),0 0 18px rgba(34,197,94,.45);position:relative;">
+         <span style="position:absolute;left:8%;right:8%;top:50%;height:2px;background:#22c55e;box-shadow:0 0 8px #22c55e;"></span>
+        </div>
+       </div>
+      </div>
        <canvas id="qrCanvas" style="display: none;"></canvas>
        <div id="qrStatus" style="color: #4a9aff; font-size: 14px; margin-top: 12px;">
         Inisialisasi kamera...
@@ -1836,9 +1843,8 @@ video.onloadedmetadata = () => {
     .then(() => {
       console.log("✅ Kamera LIVE");
       video.style.display = 'block';
+      const guide = document.getElementById('qrScanGuide'); if (guide) guide.style.display = 'flex';
       qrScannerActive = true;
-
-      // 🔥 PANGGIL detectQR DI SINI
       detectQR();
     })
     .catch(err => {
@@ -1846,7 +1852,7 @@ video.onloadedmetadata = () => {
     });
 };
           
-          statusDiv.textContent = '✓ Kamera siap. Arahkan ke QR Code atau masukkan nama peserta...';
+          statusDiv.textContent = '📷 KAMERA AKTIF — Halakan QR dalam bingkai hijau. Pengesahan akan dipaparkan di bawah.';
           statusDiv.style.color = '#4a9aff';
           inputField.focus();
           
@@ -1909,7 +1915,7 @@ if (code && code.data) {
         })
         .catch(err => {
           console.error('Camera access error:', err);
-          statusDiv.textContent = '❌ Tidak dapat akses kamera. Sila gunakan input manual:';
+          statusDiv.textContent = '❌ KAMERA GAGAL DIBUKA. Benarkan akses kamera dan buka laman melalui HTTPS, atau gunakan input manual.';
           statusDiv.style.color = '#e07070';
           video.style.display = 'none';
           qrScannerActive = false;
@@ -1975,7 +1981,6 @@ function playBeep() {
   } catch (err) { console.warn('Bunyi QR tidak tersedia:', err); }
 }
     function processQRData(recordId) {
-playBeep();
       const record = allRecords.find(r => r.id === recordId);
       if (!record) {
         showQRError('❌ Data peserta tidak valid');
@@ -1983,7 +1988,7 @@ playBeep();
       }
 
       // Cegah scan berulang
-if (record.attendance_status === 'present') {
+if (['present', 'hadir'].includes(String(record.attendance_status || '').toLowerCase())) {
 
   const resultDiv = document.getElementById('qrResult');
   const resultText = document.getElementById('qrResultText');
@@ -2000,13 +2005,19 @@ if (record.attendance_status === 'present') {
     </div>
   `;
 
-  resultDiv.style.background = 'rgba(255,165,0,0.15)';
-  resultDiv.style.border = '1px solid rgba(255,165,0,0.4)';
+  resultDiv.style.background = 'rgba(255,165,0,0.22)';
+  resultDiv.style.border = '3px solid #f59e0b';
+  resultDiv.style.color = '#fff';
   resultDiv.style.display = 'block';
-
+  resultDiv.style.boxShadow = '0 0 24px rgba(245,158,11,.35)';
+  playBeep();
+  if (navigator.vibrate) navigator.vibrate([100,60,100]);
   return;
 }
 
+// QR peserta dikenal pasti: beri pengesahan visual, bunyi dan getaran.
+playBeep();
+if (navigator.vibrate) navigator.vibrate(120);
 // Mark as present
 record.attendance_status = 'Hadir';
 
@@ -2029,9 +2040,13 @@ fetch("https://script.google.com/macros/s/AKfycby1e70AEf_4Dt0ReOid72B0Dl8PJ-4ori
       const resultText = document.getElementById('qrResultText');
 
       resultText.innerHTML = `<div style="font-size: 14px; margin-bottom: 4px;">✓ CHECK-IN BERHASIL</div><div style="font-size: 12px; opacity: 0.9;">${record.name}</div><div style="font-size: 11px; margin-top: 4px; opacity: 0.8;">Masa: ${record.check_in_time}</div>`;
-      resultDiv.style.background = 'rgba(96,192,128,0.15)';
-      resultDiv.style.border = '1px solid rgba(96,192,128,0.4)';
+      resultDiv.style.background = 'rgba(22,163,74,0.28)';
+      resultDiv.style.border = '3px solid #22c55e';
+      resultDiv.style.color = '#ffffff';
       resultDiv.style.display = 'block';
+      resultDiv.style.boxShadow = '0 0 28px rgba(34,197,94,.45)';
+      resultDiv.style.fontSize = '1.15rem';
+      resultDiv.style.padding = '18px';
 
       // Update attendance view
       if (currentTab === 'kehadiran') {
@@ -2040,6 +2055,7 @@ fetch("https://script.google.com/macros/s/AKfycby1e70AEf_4Dt0ReOid72B0Dl8PJ-4ori
 
       setTimeout(() => {
         resultDiv.style.display = 'none';
+        resultDiv.style.boxShadow = 'none';
         document.getElementById('qrInput').focus();
       }, 2500);
     }
