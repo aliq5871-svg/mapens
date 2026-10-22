@@ -711,6 +711,7 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
 <button onclick="switchTab('ketua_jabatan')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="ketua_jabatan" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="user-round-check" style="width:16px;height:16px;"></i> Ketua Jabatan</span></button>
 <button onclick="switchTab('penyumbang')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="penyumbang" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="hand-heart" style="width:16px;height:16px;"></i> Penyumbang</span></button>
 <button onclick="switchTab('aturcara')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="aturcara" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="calendar-clock" style="width:16px;height:16px;"></i> Atur Cara Majlis</span></button>
+<button onclick="switchTab('bukuaturcara')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="bukuaturcara" style="background: rgba(184,134,11,0.12); color: #b8860b;"><span class="flex items-center gap-2"><i data-lucide="book-open" style="width:16px;height:16px;"></i> Buku Atur Cara</span></button>
     <button onclick="switchTab('kehadiran')" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide" data-tab="kehadiran" style="background: rgba(184,134,11,0.12); color: #b8860b;"> <span class="flex items-center gap-2"><i data-lucide="clipboard-check" style="width:16px;height:16px;"></i> Rekod Kehadiran</span> </button>
 <button onclick="switchTab('pengunjung')"
         class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide"
@@ -721,7 +722,7 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
     <i data-lucide="users"
        style="width:16px;height:16px;"></i>
 
-    Pengunjung
+    Link Kehadiran Pengunjung
   </span>
 </button>
       </div>
@@ -790,6 +791,21 @@ document.addEventListener('click',function(e){const modal=document.getElementByI
     <div class="agenda-item"><time>11.30 PM</time><div><p>Bersurai</p></div></div>
   </div>
   <p class="text-center text-xs mt-6" style="color:#bca66b;">MARUDU HEBAT • DRIVE TO EXCELLENT</p>
+</div>
+<!-- BUKU ATUR CARA DIGITAL -->
+<div id="bukuAturcaraPanel" style="display:none;" class="mt-6 rounded-2xl p-4 sm:p-8">
+  <div class="rounded-2xl p-5 sm:p-7 text-center mb-5" style="background:linear-gradient(135deg,#061633,#0b3473);border:1px solid #c9a227;box-shadow:0 12px 35px rgba(0,0,0,.25);">
+    <div class="flex justify-center mb-3"><i data-lucide="book-open-check" style="width:42px;height:42px;color:#ffd966;"></i></div>
+    <h3 class="font-heading text-2xl sm:text-3xl font-bold" style="color:#ffd966;">Buku Atur Cara MAPeNS 2026</h3>
+    <p class="mt-2 text-sm" style="color:#e8d5a3;">Majlis Apresiasi Pengurusan Sekolah • PPD Kota Marudu</p>
+    <a href="https://anyflip.com/uhivv/jodd/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 mt-5 px-5 py-3 rounded-xl font-semibold" style="background:#c9a227;color:#061633;text-decoration:none;">
+      <i data-lucide="external-link" style="width:18px;height:18px;"></i> Buka Buku Atur Cara
+    </a>
+  </div>
+  <div style="width:100%;height: min(78vh,850px);min-height:480px;border:1px solid rgba(244,215,123,.5);border-radius:14px;overflow:hidden;background:#fff;">
+    <iframe src="https://anyflip.com/uhivv/jodd/" title="Buku Atur Cara MAPeNS 2026" loading="lazy" allowfullscreen style="width:100%;height:100%;border:0;" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  <p class="text-center text-xs mt-4" style="color:#bca66b;">Jika buku tidak dipaparkan di sini, tekan “Buka Buku Atur Cara”.</p>
 </div>
       </div><!-- Attendance List -->
     <div id="attendanceList" style="display:none;">
@@ -1009,6 +1025,7 @@ let deleteTarget = null;
       ketua_jabatan: { title: "Ketua Jabatan", desc: "Penghargaan dan pengiktirafan kepada penerima daripada Ketua Jabatan", icon: "user-round-check" },
       penyumbang: { title: "Penyumbang", desc: "Penghargaan kepada individu, organisasi atau pihak yang menyumbang", icon: "hand-heart" },
       aturcara: { title: "Atur Cara Majlis MAPeNS 2026", desc: "Tentatif perjalanan Majlis Apresiasi Pengurusan Sekolah", icon: "calendar-clock" },
+      bukuaturcara: { title: "Buku Atur Cara MAPeNS 2026", desc: "Buku digital Majlis Apresiasi Pengurusan Sekolah PPD Kota Marudu", icon: "book-open" },
       apc: { title: "Penerima Anugerah APC", desc: "Anugerah Perkhidmatan Cemerlang", icon: "trophy" },
       pangkat: { title: "Penerima Kenaikan Pangkat", desc: "Tahniah atas kenaikan pangkat yang diterima", icon: "trending-up" },
       pesara: { title: "Penerima Pesara", desc: "Penghargaan atas jasa & dedikasi sepanjang perkhidmatan", icon: "heart" },
@@ -1045,7 +1062,7 @@ let deleteTarget = null;
       document.getElementById('sectionDesc').textContent = info.desc;
      document.getElementById('recipientGrid').style.display =
   currentTab === 'kehadiran' ||
-  currentTab === 'pengunjung' || currentTab === 'aturcara'
+  currentTab === 'pengunjung' || currentTab === 'aturcara' || currentTab === 'bukuaturcara'
     ? 'none'
     : 'grid';
 document.getElementById('attendanceList').style.display =
@@ -1058,6 +1075,7 @@ document.getElementById('visitorList').style.display =
     ? 'block'
     : 'none';
 document.getElementById('agendaPanel').style.display = currentTab === 'aturcara' ? 'block' : 'none';
+document.getElementById('bukuAturcaraPanel').style.display = currentTab === 'bukuaturcara' ? 'block' : 'none';
 const visitorSection =
   document.getElementById('visitorList');
 
@@ -1083,8 +1101,8 @@ if (currentTab === 'pengunjung') {
 
   renderVisitors();
 
-} else if (currentTab === 'aturcara') {
-  // Paparkan panel atur cara statik tanpa memuatkan rekod penerima.
+} else if (currentTab === 'aturcara' || currentTab === 'bukuaturcara') {
+  // Paparkan panel atur cara/buku digital tanpa memuatkan rekod penerima.
 } else {
 
   updateRegularView();
@@ -1451,7 +1469,8 @@ fetch("https://script.google.com/macros/s/AKfycbyNjlP05xWhideoHvxLdWlAh5Zw0IR9g1
     canCreate() &&
     currentTab !== 'kehadiran' &&
     currentTab !== 'pengunjung' &&
-    currentTab !== 'aturcara'
+    currentTab !== 'aturcara' &&
+    currentTab !== 'bukuaturcara'
   ) {
     addDataContainer.style.display = 'flex';
   } else {
