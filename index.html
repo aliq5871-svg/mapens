@@ -27,7 +27,7 @@ document.addEventListener('keydown', function(event) {
 
 function getSeatPosition(seat) { const positions = { A1: { top:'45%', left:'58%' }, A2: { top:'45%', left:'65%' }, A3: { top:'52%', left:'58%' }, A4: { top:'52%', left:'65%' }, B1: { top:'30%', left:'40%' }, B2: { top:'30%', left:'47%' } }; return positions[seat] || { top:'50%', left:'50%' }; }
 
-function showSeatMap(id) { const record = allRecords.find(r => r.id == id); const pos = getSeatPosition(record.seat); document.getElementById('seatMapContent') .innerHTML = ` <div class="text-center mb-4"> <h2 class="text-xl font-bold" style="color:#e8d5a3;" > ${record.name} </h2> <p style="color:#d1d5db; margin-top:8px;"> Meja: ${record.table || '-'} </p> <p style="color:#ffffff; margin-top:4px;"> Kerusi: ${record.seat || '-'} </p></p> </div> <div class="mt-6 relative"> <img src="https://i.imgur.com/oUtSnZO.png" class="w-full rounded-xl" style=" border:1px solid rgba(74,154,255,0.2); " > <div style=" position:absolute; top:${pos.top}; left:${pos.left}; transform:translate(-50%,-50%); width:28px; height:28px; border-radius:999px; background:#4a9aff; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; box-shadow:0 0 20px rgba(74,154,255,0.6); " > ${record.seat} </div> </div> `; document.getElementById('seatMapModal') .classList.remove('hidden'); }
+function showSeatMap(id) { const record = allRecords.find(r => r.id == id); const pos = getSeatPosition(record.seat); document.getElementById('seatMapContent') .innerHTML = ` <div class="text-center mb-4"> <h2 class="text-xl font-bold" style="color:#e8d5a3;" > ${record.name} </h2> <p style="color:#d1d5db; margin-top:8px;"> Meja: ${record.table || '-'} </p> <p style="color:#ffffff; margin-top:4px;"> Kerusi: ${record.seat || '-'} </p></p> </div> <div class="mt-6 relative"> <img src="https://i.imgur.com/n5tpm26.png" class="w-full rounded-xl" style=" border:1px solid rgba(74,154,255,0.2); " > <div style=" position:absolute; top:${pos.top}; left:${pos.left}; transform:translate(-50%,-50%); width:28px; height:28px; border-radius:999px; background:#4a9aff; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; box-shadow:0 0 20px rgba(74,154,255,0.6); " > ${record.seat} </div> </div> `; document.getElementById('seatMapModal') .classList.remove('hidden'); }
 function showOnStage(id){
 
   const record =
@@ -669,7 +669,7 @@ section .grid.grid-cols-2.md\:grid-cols-4>div:nth-child(n+2):nth-child(-n+4){dis
     </div>
     <div style="overflow:auto;padding:12px;flex:1;">
       <iframe src="https://i.imgur.com/n5tpm26/embed?pub=true" title="Pelan tempat duduk MAPeNS 2026" loading="lazy" allowfullscreen style="display:block;width:100%;height:min(72vh,800px);border:0;border-radius:10px;background:#fff;"></iframe>
-      <p class="text-xs text-center mt-3" style="color:#a89870;">Jika pelan tidak dimuatkan oleh Imgur, <a href="https://imgur.com/a/ByZxQ2J" target="_blank" rel="noopener noreferrer" style="color:#ffd700;text-decoration:underline;">buka pelan di Imgur</a>.</p>
+      <p class="text-xs text-center mt-3" style="color:#a89870;">Jika pelan tidak dimuatkan oleh Imgur, <a href="https://i.imgur.com/n5tpm26" target="_blank" rel="noopener noreferrer" style="color:#ffd700;text-decoration:underline;">buka pelan di Imgur</a>.</p>
     </div>
   </div>
 </div>
